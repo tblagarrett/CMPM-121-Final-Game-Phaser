@@ -13,4 +13,6 @@ We will be using Phaser API along with JavaScript as Phaser is a web-based game 
 The main IDE for writing code that we will all use is Visual Studio Code which we are all comfortable with. With visual assets, there are a variety of possibilities but it is very likely that Aseprite will be used for pixel art and sprites. We all know how to make pixel art and can do art to some degree so any art program is comfortable for us to use. For version control, we are also using GitHub because that is the expected version control tool.
 ### Alternate Platform
 
+
 ## Outlook
+Our team is hoping to make a project of reasonable scope that we feel that can be accomplished giving the time frame and available resources. The hardest anticipated part of this project is switching frameworks and getting comfortable in both languages. We are hoping to expand our understanding of creating clean, readable, and scalable code in a team setting.
