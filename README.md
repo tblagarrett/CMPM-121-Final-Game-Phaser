@@ -1,5 +1,5 @@
 # Devlog Entry - 11/14/2024
-## Roles
+## Introducing the team
 Garrett Blake as Tools Lead  
 Sunny Han as Engine Lead  
 Katrina VanArsdale as Design Lead  
