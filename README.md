@@ -7,7 +7,7 @@ Lia Cui as Assistant to Enging and Design
 
 ## Tools and Materials
 ### Engines, libraries, frameworks
-Phaser 3 
+Phaser 3 is our game engine of choice, as it will help us to make a web game and can be easily adapted for any changes we may need to make. Our approach allows us to use and relearn an engine we all have some experience in, while giving room for us to experiment in other aspects of the project.
 ### Programming languages
 We will be using Phaser 3 API along with JavaScript as Phaser is a web-based game engine. Consequently, because we are using a web-based game engine we will also be using HTML and CSS albeit very minimally. On the likely chance that we wil use Sprite Atlases, we will likely also use JSON to organize sprite atlas information. Moving forward in our alternate platform, we would like to switch the main programming language from JavaScript to TypeScript.
 ### Tools
