@@ -2,15 +2,20 @@ class Grid extends Phaser.GameObjects.Container {
   constructor(scene, width, height, cellSize) {
     super(scene);
     this.scene = scene;
+    this.width = width;
+    this.height = height;
+    this.cellSize = cellSize;
 
     this.chanceToGen = 0.1;
 
     this.cells = [];
 
-    for (let i = 0; i < width; i++) {
+    for (let i = 0; i < this.width; i++) {
       let row = [];
-      for (let j = 0; j < height; j++) {
-        row.push(new Cell(scene, i, j));
+      for (let j = 0; j < this.height; j++) {
+        let newCell = new Cell(this.scene, i, j);
+        row.push(newCell);
+        this.add(newCell);
       }
       this.cells.push(row);
     }
