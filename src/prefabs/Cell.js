@@ -42,8 +42,4 @@ class Cell extends Phaser.GameObjects.Container {
             this.plant.addSun();
         }
     }
-
-    addStoredWater() {
-        if()
-    }
 }
