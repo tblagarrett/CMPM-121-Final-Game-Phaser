@@ -1,47 +1,56 @@
 export class Player extends Phaser.GameObjects.Sprite {
-  constructor(scene, x, y, texture, cellSize) {
+  constructor(scene, x, y, texture, gridSizeX, gridSizeY, cellSize) {
     super(scene, x, y, texture);
     this.scene.add.existing(this);
     this.setScale(3.5);
     this.setOrigin(0.5, 0.5);
 
-    this.CELL = cellSize;
-    this.GAMEWIDTH = this.scene.sys.game.config.width;
-    this.GAMEWIDTH = this.scene.sys.game.config.height;
+    // global constants
+    this.CELLSIZE = cellSize;
+    this.GAMEWIDTH = gridSizeX;
+    this.GAMEHEIGHT = gridSizeY;
 
+    //
     this.actions = [];
-    this.currentCell = {
-      i: Math.floor(this.x / this.CELL),
-      j: Math.floor(this.y / this.CELL),
+    this.cell = {
+      i: Math.floor(this.x / this.CELLSIZE),
+      j: Math.floor(this.y / this.CELLSIZE),
     };
 
     // Add event listeners for key inputs
     this.scene.input.keyboard.on("keydown-LEFT", () =>
-      this.move(-this.CELL, 0)
+      this.move(-this.CELLSIZE, 0)
     );
     this.scene.input.keyboard.on("keydown-RIGHT", () =>
-      this.move(this.CELL, 0)
+      this.move(this.CELLSIZE, 0)
     );
-    this.scene.input.keyboard.on("keydown-UP", () => this.move(0, -this.CELL));
-    this.scene.input.keyboard.on("keydown-DOWN", () => this.move(0, this.CELL));
+    this.scene.input.keyboard.on("keydown-UP", () =>
+      this.move(0, -this.CELLSIZE)
+    );
+    this.scene.input.keyboard.on("keydown-DOWN", () =>
+      this.move(0, this.CELLSIZE)
+    );
   }
 
   move(x, y) {
-    // checks if outside of game bounds
-    if (this.x + x < 0 || this.x + x > this.GAMEWIDTH) return;
-    if (this.y + y < 0 || this.y + y > this.GAMEWIDTH) return;
+    // Calculate new position
+    const newX = this.x + x;
+    const newY = this.y + y;
 
-    // adds to player position and updates current cell
-    this.x += x;
-    this.y += y;
-    this.currentCell = {
-      i: Math.floor(this.x / this.CELL),
-      j: Math.floor(this.y / this.CELL),
+    // Calculate new cell
+    const newCell = {
+      i: Math.floor(newX / this.CELLSIZE),
+      j: Math.floor(newY / this.CELLSIZE),
     };
-    this.actions.push({ ...this.currentCell });
-  }
 
-  position() {
-    return this.currentCell;
+    // Check if new cell is within bounds
+    if (newCell.i < 0 || newCell.i >= this.GAMEWIDTH) return;
+    if (newCell.j < 0 || newCell.j >= this.GAMEHEIGHT) return;
+
+    // Update player position and current cell
+    this.x = newX;
+    this.y = newY;
+    this.cell = newCell;
+    this.actions.push({ ...this.cell });
   }
 }

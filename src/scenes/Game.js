@@ -28,10 +28,17 @@ export class Game extends Scene {
       this.cellSize / 2,
       this.cellSize / 2,
       "hero",
+      this.gridSizeX,
+      this.gridSizeY,
       this.cellSize
     );
 
     this.plantsReaped = 0;
+
+    // sow/reap input
+    this.input.keyboard.on("keydown-SPACE", () =>
+      this.sowOrReap(this.player.cell.i, this.player.cell.j)
+    );
   }
 
   timeStep() {
