@@ -17,7 +17,7 @@ export class Cell extends Phaser.GameObjects.Sprite {
   }
 
   reap() {
-    plant = this.plant;
+    const plant = this.plant;
     this.plant = null;
     return plant;
   }
