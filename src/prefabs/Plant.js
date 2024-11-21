@@ -3,6 +3,7 @@ export class Plant extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y, type) {
     super(scene, x, y);
     this.plant = null;
+    this.maxWater = 1;
     this.waterStored = 0;
     this.sunStored = 0;
     this.level = 1;
@@ -23,11 +24,11 @@ export class Plant extends Phaser.GameObjects.Sprite {
   }
 
   needsWater() {
-    return this.maxWater - this.waterStored >= 1;
+    return this.waterStored < this.maxWater;
   }
 
   needsSun() {
-    return this.maxSun - this.sunStored >= 1;
+    return this.sunStored < this.maxSun;
   }
 
   addWater() {

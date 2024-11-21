@@ -49,13 +49,17 @@ export class Cell extends Phaser.GameObjects.Sprite {
   }
 
   sow() {
-    let type = Math.floor(Math.random() * (1 - 3) + 1);
+    let type = getRandomInt(1, 3);
     this.plant = new Plant(this.scene, this.x, this.y, type);
+
+    this.updateIndicators();
   }
 
   reap() {
     const plant = this.plant;
     this.plant = null;
+
+    this.updateIndicators();
     return plant;
   }
 
@@ -74,12 +78,16 @@ export class Cell extends Phaser.GameObjects.Sprite {
     return this.plant.isMaxLevel();
   }
 
-  addWater(amount) {
-    this.waterStored += amount;
+  addWater(isAddingWater) {
+    let amount = getRandomInt(1, 5);
+
+    if (isAddingWater) {
+      this.waterStored += amount;
+    }
 
     if (this.waterStored > 0) {
-      if (this.plant && this.plant.needsWater(amount)) {
-        this.plant.addWater(1);
+      if (this.plant && this.plant.needsWater()) {
+        this.plant.addWater();
         this.waterStored--;
       }
     }
@@ -92,4 +100,10 @@ export class Cell extends Phaser.GameObjects.Sprite {
       this.plant.addSun();
     }
   }
+}
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }

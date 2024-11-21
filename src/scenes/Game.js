@@ -50,12 +50,9 @@ export class Game extends Scene {
 
     if (cell.canSow()) {
       cell.sow();
-      console.log("SOW");
     } else if (cell.canReap()) {
       cell.reap();
     }
-
-    cell.updateIndicators();
   }
 
   checkForComplete() {}
