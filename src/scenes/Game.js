@@ -47,7 +47,6 @@ export class Game extends Scene {
 
   sowOrReap(x, y) {
     let cell = this.grid.getCell(x, y);
-    console.log("sowing reaping", this.plantsReaped);
 
     let sown = cell.sow();
     if (!sown) {
