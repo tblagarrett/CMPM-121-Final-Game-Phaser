@@ -31,6 +31,7 @@ export class Preloader extends Scene {
       frameWidth: 32,
       frameHeight: 32,
     });
+    this.load.image("blank-cell", "Square.png");
   }
 
   create() {
