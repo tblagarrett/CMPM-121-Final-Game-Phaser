@@ -1,10 +1,12 @@
-class Game extends Phaser.Scene {
+import { Scene } from "phaser";
+
+export class Game extends Scene {
   constructor() {
     super("Game");
   }
 
   create() {
-    this.cameras.main.setBackgroundColor(0x000000);
+    this.cameras.main.setBackgroundColor(0xffffff);
 
     this.gridSizeX = 8;
     this.gridSizeY = 8;
