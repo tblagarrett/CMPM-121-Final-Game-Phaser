@@ -38,7 +38,7 @@ export default class Grid extends Phaser.GameObjects.Container {
         if (random < this.chanceToGen / 2) {
           cell.addSun();
         } else if (random < this.chanceToGen) {
-          cell.addWater(Math.random(Range(1, 5)));
+          cell.addWater(Math.random(new Range(1, 5)));
         }
 
         // check parameters for plants

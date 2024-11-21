@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { Plant } from "./Plant";
 export class Cell extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y, texture, frame, cellSize) {
     super(scene, x, y, texture, frame);
@@ -38,7 +39,7 @@ export class Cell extends Phaser.GameObjects.Sprite {
     this.waterStored += amount;
 
     if (this.waterStored > 0) {
-      if (this.plant.needsWater(amount)) {
+      if (this.plant && this.plant.needsWater(amount)) {
         this.plant.addWater(1);
         this.waterStored--;
       }
@@ -46,7 +47,7 @@ export class Cell extends Phaser.GameObjects.Sprite {
   }
 
   addSun() {
-    if (this.plant.needsSun()) {
+    if (this.plant && this.plant.needsSun()) {
       this.plant.addSun();
     }
   }

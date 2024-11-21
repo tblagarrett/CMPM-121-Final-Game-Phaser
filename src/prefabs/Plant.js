@@ -22,11 +22,11 @@ export class Plant extends Phaser.GameObjects.Sprite {
     }
   }
 
-  needWater() {
+  needsWater() {
     return this.maxWater - this.waterStored >= 1;
   }
 
-  needSun() {
+  needsSun() {
     return this.maxSun - this.sunStored >= 1;
   }
 

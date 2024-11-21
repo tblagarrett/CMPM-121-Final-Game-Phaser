@@ -33,6 +33,8 @@ export class Player extends Phaser.GameObjects.Sprite {
   }
 
   move(x, y) {
+    this.scene.timeStep();
+
     // Calculate new position
     const newX = this.x + x;
     const newY = this.y + y;
