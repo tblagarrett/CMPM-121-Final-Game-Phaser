@@ -1,17 +1,24 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="./favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./style.css" />
+    <script src="lib/phaser.js"></script>
+    <script src="src/prefabs/Cell.js"></script>
+    <script src="src/prefabs/Grid.js"></script>
+    <script src="src/prefabs/Plant.js"></script>
+    <script src="src/scenes/Game.js"></script>
+    <script src="src/scenes/Preloader.js"></script>
     <title>Phaser - Template</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="app">
-        <div id="game-container"></div>
+      <div id="game-container"></div>
     </div>
-    <!-- <script type="module" src="src/main.js"></script> -->
-</body>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
 </html>

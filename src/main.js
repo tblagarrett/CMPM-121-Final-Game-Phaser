@@ -1,12 +1,9 @@
-import { Game } from "./scenes/Game";
-import { Preloader } from "./scenes/Preloader";
-
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config = {
   type: Phaser.AUTO,
-  width: 1024,
-  height: 768,
+  width: 824,
+  height: 824,
   parent: "game-container",
   backgroundColor: "#028af8",
   scale: {
@@ -16,4 +13,5 @@ const config = {
   scene: [Preloader, Game],
 };
 
-export default new Phaser.Game(config);
+const game = new Phaser.Game(config);
+const { width, height } = game.config;
