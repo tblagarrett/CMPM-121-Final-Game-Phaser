@@ -38,10 +38,11 @@ export default class Grid extends Phaser.GameObjects.Container {
         if (random < this.chanceToGen / 2) {
           cell.addSun();
         } else if (random < this.chanceToGen) {
-          cell.addWater(Math.random(new Range(1, 5)));
+          cell.addWater(getRandomInt(1, 5));
         }
 
-        // check parameters for plants
+        cell.updateIndicators();
+        // check parameters for plant leveling
       }
     }
   }
@@ -49,4 +50,10 @@ export default class Grid extends Phaser.GameObjects.Container {
   getCell(x, y) {
     return this.cells[y][x];
   }
+}
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }

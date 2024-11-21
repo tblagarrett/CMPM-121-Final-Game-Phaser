@@ -7,10 +7,45 @@ export class Cell extends Phaser.GameObjects.Sprite {
     this.waterStored = 0;
 
     this.sprite = scene.add.existing(this);
+    this.sprite.setDepth(0);
     this.displayWidth = cellSize;
     this.displayHeight = cellSize;
 
-    // console.log(`${x}, ${y}`);
+    // Add text indicators
+    this.waterText = scene.add.text(
+      y + cellSize / 2 + 5, // Position near top-left
+      x + cellSize / 2 + 5,
+      `${this.waterStored}`,
+      { fontSize: "16px", fill: "#0000ff" } // Blue text
+    );
+    this.waterText.setDepth(1);
+
+    // Add text indicators
+    this.isPlantThere;
+    if (this.plant) {
+      this.isPlantThere = this.plant.level;
+    } else {
+      this.isPlantThere = 0;
+    }
+    this.plantText = scene.add.text(
+      y + cellSize / 2 - 20, // Position near top-left
+      x + cellSize / 2 + 5,
+      `${this.isPlantThere}`,
+      { fontSize: "16px", fill: "#ffff0" } // Blue text
+    );
+    this.plantText.setDepth(1);
+  }
+
+  // Method to update the visual indicators
+  updateIndicators() {
+    this.waterText.setText(`${this.waterStored}`);
+
+    if (this.plant) {
+      this.isPlantThere = this.plant.level;
+    } else {
+      this.isPlantThere = 0;
+    }
+    this.plantText.setText(`${this.isPlantThere}`);
   }
 
   sow() {
@@ -25,13 +60,17 @@ export class Cell extends Phaser.GameObjects.Sprite {
   }
 
   canSow() {
-    if (this.plant != null) {
+    if (this.plant == null) {
       return true;
     }
     return false;
   }
 
   canReap() {
+    if (!this.plant) {
+      return false;
+    }
+
     return this.plant.isMaxLevel();
   }
 
@@ -44,6 +83,8 @@ export class Cell extends Phaser.GameObjects.Sprite {
         this.waterStored--;
       }
     }
+
+    this.updateIndicators();
   }
 
   addSun() {

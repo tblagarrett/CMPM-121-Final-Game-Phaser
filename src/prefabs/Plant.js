@@ -37,4 +37,8 @@ export class Plant extends Phaser.GameObjects.Sprite {
   addSun() {
     this.sunStored++;
   }
+
+  isMaxLevel() {
+    return this.level >= this.maxLevel;
+  }
 }
