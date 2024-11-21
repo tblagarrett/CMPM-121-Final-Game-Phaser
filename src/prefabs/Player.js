@@ -26,6 +26,9 @@ export class Player extends Phaser.GameObjects.Sprite {
     this.x += x;
     this.y += y;
     this.actions.push({ x: this.x, y: this.y });
-    console.log(this.actions);
+  }
+
+  position() {
+    return { x: this.x, y: this.y };
   }
 }
