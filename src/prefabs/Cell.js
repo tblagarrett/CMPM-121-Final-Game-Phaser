@@ -9,7 +9,7 @@ export class Cell extends Phaser.GameObjects.Sprite {
     this.displayWidth = cellSize;
     this.displayHeight = cellSize;
 
-    console.log(`${x}, ${y}`);
+    // console.log(`${x}, ${y}`);
   }
 
   sow(plant) {

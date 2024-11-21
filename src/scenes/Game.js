@@ -1,6 +1,7 @@
 import Cell from "../prefabs/Cell";
 import Grid from "../prefabs/Grid";
 import { Scene } from "phaser";
+import { Player } from "../prefabs/Player";
 
 export class Game extends Scene {
   constructor() {
@@ -14,13 +15,19 @@ export class Game extends Scene {
     this.gridSizeY = 10;
     this.cellSize = 80;
 
-    this.player = null;
     this.grid = new Grid(
       this,
       this.cellSize / 2,
       this.cellSize / 2,
       this.gridSizeX,
       this.gridSizeY,
+      this.cellSize
+    );
+    this.player = new Player(
+      this,
+      this.cellSize / 2,
+      this.cellSize / 2,
+      "hero",
       this.cellSize
     );
 
