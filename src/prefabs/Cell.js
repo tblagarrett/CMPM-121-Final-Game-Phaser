@@ -5,6 +5,7 @@ export class Cell extends Phaser.GameObjects.Sprite {
     super(scene, x, y, texture, frame);
     this.plant = null;
     this.waterStored = 0;
+    this.maxWater = 6;
 
     this.sprite = scene.add.existing(this);
     this.sprite.setDepth(0);
@@ -82,7 +83,11 @@ export class Cell extends Phaser.GameObjects.Sprite {
     let amount = getRandomInt(1, 5);
 
     if (isAddingWater) {
-      this.waterStored += amount;
+      if (amount + this.waterStored > this.maxWater) {
+        this.waterStored = this.maxWater;
+      } else {
+        this.waterStored += amount;
+      }
     }
 
     if (this.waterStored > 0) {
