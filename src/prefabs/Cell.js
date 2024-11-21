@@ -12,8 +12,9 @@ export class Cell extends Phaser.GameObjects.Sprite {
     // console.log(`${x}, ${y}`);
   }
 
-  sow(plant) {
-    this.plant = plant;
+  sow() {
+    let type = Math.floor(Math.random() * (1 - 3) + 1);
+    this.plant = new Plant(this.scene, this.x, this.y, type);
   }
 
   reap() {
