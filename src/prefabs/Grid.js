@@ -18,7 +18,7 @@ export default class Grid extends Phaser.GameObjects.Container {
           this.scene,
           i * cellSize,
           j * cellSize,
-          null, // Cell Texture
+          "blank-cell", // Cell Texture
           null,
           cellSize
         );
