@@ -1,3 +1,5 @@
+import Cell from "../prefabs/Cell";
+import Grid from "../prefabs/Grid";
 import { Scene } from "phaser";
 
 export class Game extends Scene {
@@ -8,11 +10,19 @@ export class Game extends Scene {
   create() {
     this.cameras.main.setBackgroundColor(0xffffff);
 
-    this.gridSizeX = 8;
-    this.gridSizeY = 8;
+    this.gridSizeX = 10;
+    this.gridSizeY = 10;
+    this.cellSize = 80;
 
     this.player = null;
-    this.grid = null;
+    this.grid = new Grid(
+      this,
+      this.cellSize / 2,
+      this.cellSize / 2,
+      this.gridSizeX,
+      this.gridSizeY,
+      this.cellSize
+    );
 
     this.plantsReaped = 0;
   }
