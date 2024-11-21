@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import { Player } from "../prefabs/Player";
 
 export class Game extends Scene {
   constructor() {
@@ -11,7 +12,14 @@ export class Game extends Scene {
     this.gridSizeX = 8;
     this.gridSizeY = 8;
 
-    this.player = null;
+    this.player = new Player(
+      this,
+      8,
+      8,
+      "hero",
+      this.gridSizeX,
+      this.gridSizeY
+    );
     this.grid = null;
 
     this.plantsReaped = 0;
