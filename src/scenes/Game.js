@@ -15,20 +15,19 @@ export class Game extends Scene {
     this.gridSizeY = 10;
     this.cellSize = 80;
 
-    this.player = new Player(
-      this,
-      8,
-      8,
-      "hero",
-      this.gridSizeX,
-      this.gridSizeY
-    );
     this.grid = new Grid(
       this,
       this.cellSize / 2,
       this.cellSize / 2,
       this.gridSizeX,
       this.gridSizeY,
+      this.cellSize
+    );
+    this.player = new Player(
+      this,
+      this.cellSize / 2,
+      this.cellSize / 2,
+      "hero",
       this.cellSize
     );
 
