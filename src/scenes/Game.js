@@ -52,6 +52,7 @@ export class Game extends Scene {
       cell.sow();
     } else if (cell.canReap()) {
       cell.reap();
+      this.plantsReaped++;
     }
   }
 
