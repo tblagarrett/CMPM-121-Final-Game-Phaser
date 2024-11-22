@@ -33,6 +33,7 @@ export class Plant extends Phaser.GameObjects.Sprite {
     }
 
     this.scene.add.existing(this)
+    this.setDisplaySize(80,80);
   }
 
   needsWater() {
@@ -56,14 +57,17 @@ export class Plant extends Phaser.GameObjects.Sprite {
   }
 
   levelUp(num){
-    if(!this.needsWater() && !this.needsSun()){
+    if(this.level < this.maxLevel) {
+      if(!this.needsWater() && !this.needsSun()){
         if(this.plantReq < num){
             this.level++;
-            const spriteName = "plant" + this.type + "-level" + this.level + ".png";
+            const spriteName = "plant" + this.type + "-level" + this.level;
             this.waterStored = 0;
             this.sunStored = 0;
             this.setTexture(spriteName);
+            this.setDisplaySize(80,80);
         }
+      }
     }
   }
 

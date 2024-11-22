@@ -59,10 +59,11 @@ export class Cell extends Phaser.GameObjects.Sprite {
 
   reap() {
     const plant = this.plant;
+    plant.destroy();
     this.plant = null;
 
     this.updateIndicators();
-    return plant;
+    //return plant;
   }
 
   canSow() {
