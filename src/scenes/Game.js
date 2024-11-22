@@ -1,4 +1,7 @@
+import Cell from "../prefabs/Cell";
+import Grid from "../prefabs/Grid";
 import { Scene } from "phaser";
+import { Player } from "../prefabs/Player";
 
 export class Game extends Scene {
   constructor() {
@@ -8,13 +11,34 @@ export class Game extends Scene {
   create() {
     this.cameras.main.setBackgroundColor(0xffffff);
 
-    this.gridSizeX = 8;
-    this.gridSizeY = 8;
+    this.gridSizeX = 10;
+    this.gridSizeY = 10;
+    this.cellSize = 80;
 
-    this.player = null;
-    this.grid = null;
+    this.grid = new Grid(
+      this,
+      this.cellSize / 2,
+      this.cellSize / 2,
+      this.gridSizeX,
+      this.gridSizeY,
+      this.cellSize
+    );
+    this.player = new Player(
+      this,
+      this.cellSize / 2,
+      this.cellSize / 2,
+      "hero",
+      this.gridSizeX,
+      this.gridSizeY,
+      this.cellSize
+    );
 
     this.plantsReaped = 0;
+
+    // sow/reap input
+    this.input.keyboard.on("keydown-SPACE", () =>
+      this.sowOrReap(this.player.cell.i, this.player.cell.j)
+    );
   }
 
   timeStep() {
@@ -24,11 +48,11 @@ export class Game extends Scene {
   sowOrReap(x, y) {
     let cell = this.grid.getCell(x, y);
 
-    let sown = cell.sow();
-    if (!sown) {
-      if (cell.reap()) {
-        this.plantsReaped++;
-      } // Returns the plant reaped
+    if (cell.canSow()) {
+      cell.sow();
+    } else if (cell.canReap()) {
+      cell.reap();
+      this.plantsReaped++;
     }
   }
 
