@@ -50,7 +50,7 @@ export class Plant extends Phaser.GameObjects.Sprite {
     if(!this.needsWater() && !this.needsSun()){
         if(this.plantReq < num){
             this.level++;
-            const spriteName = "plant" + this.type + "-level" + this.level;
+            const spriteName = "plant" + this.type + "-level" + this.level + ".png";
             this.waterStored = 0;
             this.sunStored = 0;
            this.sprite.setTexture(spriteName);
