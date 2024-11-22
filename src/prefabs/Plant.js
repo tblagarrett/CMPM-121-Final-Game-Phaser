@@ -13,7 +13,7 @@ export class Plant extends Phaser.GameObjects.Sprite {
       this.maxSun = 5;
       this.maxWater = 8;
     } else if (type == 2) {
-      this.maxLevel = 5;
+      this.maxLevel = 4;
       this.maxSun = 3;
       this.maxWater = 5;
     } else if (type == 3) {
