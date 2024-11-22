@@ -45,7 +45,7 @@ export class Plant extends Phaser.GameObjects.Sprite {
 
   levelUp(num){
     if(!this.needsWater() && !this.needsSun()){
-        if(this.plantReq <= num){
+        if(this.plantReq < num){
             this.level++;
             this.waterStored = 0;
             this.sunStored = 0;
