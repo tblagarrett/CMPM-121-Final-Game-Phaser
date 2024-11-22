@@ -8,6 +8,10 @@ export class Game extends Scene {
     super("Game");
   }
 
+  init() {
+    this.ENDGOAL = 50;
+  }
+
   create() {
     this.cameras.main.setBackgroundColor(0xffffff);
 
@@ -33,12 +37,13 @@ export class Game extends Scene {
       this.cellSize
     );
 
-    this.plantsReaped = 0;
+    this.plantsReaped = 50;
 
     // sow/reap input
-    this.input.keyboard.on("keydown-SPACE", () =>
-      this.sowOrReap(this.player.cell.i, this.player.cell.j)
-    );
+    this.input.keyboard.on("keydown-SPACE", () => {
+      this.sowOrReap(this.player.cell.i, this.player.cell.j);
+      this.checkForComplete();
+    });
   }
 
   timeStep() {
@@ -47,7 +52,8 @@ export class Game extends Scene {
 
   sowOrReap(x, y) {
     let cell = this.grid.getCell(x, y);
-
+    this.plantsReaped++;
+    console.log(this.plantsReaped);
     if (cell.canSow()) {
       cell.sow();
     } else if (cell.canReap()) {
@@ -56,5 +62,11 @@ export class Game extends Scene {
     }
   }
 
-  checkForComplete() {}
+  checkForComplete() {
+    console.log("checking ");
+    if (this.plantsReaped >= this.ENDGOAL) {
+      this.scene.pause("Game");
+      this.scene.launch("End");
+    }
+  }
 }
