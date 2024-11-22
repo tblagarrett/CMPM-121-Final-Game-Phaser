@@ -56,22 +56,22 @@ export default class Grid extends Phaser.GameObjects.Container {
 
   countAdjacentPlants(x,y) {
     let neighbors = 0;
-    //console.log(this.getCell(x,y++));
-    if(this.cells[x][y++].plant) {
+    console.log(this.cells[x][y+1].plant);
+    if(this.cells[x][y+1].plant) {
       neighbors++;
-      console.log(x + " " + y++ + " [x][y++] " + this.cells[x][y++].plant);
+      console.log(x, y+1);
     }
-    if(this.cells[x][y--].plant) {
+    if(this.cells[x][y-1].plant) {
       neighbors++;
-      console.log(x + " " + y-- + " [x][y--]");
+      console.log(x, y-1);
     }
-    if(this.cells[x++][y].plant) {
+    if(this.cells[x+1][y].plant) {
       neighbors++;
-      console.log(x++ + " " + y + " [x++][y]");
+      console.log(x+1, y);
     }
-    if(this.cells[x--][y].plant) {
+    if(this.cells[x-1][y].plant) {
       neighbors++;
-      console.log(x-- + " " + y + " [x--][y]");
+      console.log(x-1, y);
     }
     
   }
