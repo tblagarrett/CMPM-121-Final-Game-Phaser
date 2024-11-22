@@ -6,6 +6,7 @@ export class Plant extends Phaser.GameObjects.Sprite {
     this.waterStored = 0;
     this.sunStored = 0;
     this.level = 1;
+    this.plantReq = 1;
 
     if (this.type == 1) {
       this.maxLevel = 3;
@@ -41,4 +42,15 @@ export class Plant extends Phaser.GameObjects.Sprite {
   isMaxLevel() {
     return this.level >= this.maxLevel;
   }
+
+  levelUp(num){
+    if(!this.needsWater() && !this.needsSun()){
+        if(this.plantReq <= num){
+            this.level++;
+            this.waterStored = 0;
+            this.sunStored = 0;
+        }
+    }
+  }
+
 }
