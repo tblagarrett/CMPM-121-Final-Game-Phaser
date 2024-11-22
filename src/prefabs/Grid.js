@@ -35,13 +35,11 @@ export default class Grid extends Phaser.GameObjects.Container {
       for (let j = 0; j < this.height; j++) {
         let random = Math.random();
         let cell = this.cells[i][j];
-        if (random < this.chanceToGen / 2) {
+        if (random < this.chanceToGen) {
           cell.addSun();
         }
-        cell.addWater(random < this.chanceToGen);
-        console.log(cell.plant, i,j);
+        cell.addWater(random < this.chanceToGen / 2);
         if(cell.plant) {
-          //console.log("i,j", i,j);
           cell.plant.levelUp(this.countAdjacentPlants(i,j));
         }
         
@@ -56,23 +54,28 @@ export default class Grid extends Phaser.GameObjects.Container {
 
   countAdjacentPlants(x,y) {
     let neighbors = 0;
-    console.log(this.cells[x][y+1].plant);
-    if(this.cells[x][y+1].plant) {
-      neighbors++;
-      console.log(x, y+1);
+    if(y < this.height-1) {
+      if(this.cells[x][y+1].plant) {
+        neighbors++;
+      }
     }
-    if(this.cells[x][y-1].plant) {
-      neighbors++;
-      console.log(x, y-1);
+    if(y > 0) {
+      if(this.cells[x][y-1].plant) {
+        neighbors++;
+      }
+
     }
-    if(this.cells[x+1][y].plant) {
-      neighbors++;
-      console.log(x+1, y);
+    if(x < this.width-1) {
+      if(this.cells[x+1][y].plant) {
+        neighbors++;
+      }
     }
-    if(this.cells[x-1][y].plant) {
-      neighbors++;
-      console.log(x-1, y);
+    if(x > 0) {
+      if(this.cells[x-1][y].plant) {
+        neighbors++;
+      }
     }
-    
+
+    return neighbors;
   }
 }
