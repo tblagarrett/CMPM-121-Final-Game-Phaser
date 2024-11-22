@@ -3,6 +3,7 @@ import { Plant } from "./Plant";
 export class Cell extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y, texture, frame, cellSize) {
     super(scene, x, y, texture, frame);
+    this.cellSize = cellSize;
     this.plant = null;
     this.waterStored = 0;
     this.maxWater = 6;
@@ -51,7 +52,7 @@ export class Cell extends Phaser.GameObjects.Sprite {
 
   sow() {
     let type = getRandomInt(1, 3);
-    this.plant = new Plant(this.scene, this.x, this.y, type);
+    this.plant = new Plant(this.scene, this.y + (this.cellSize / 2), this.x + (this.cellSize / 2), type, "plant1-level1");
 
     this.updateIndicators();
   }
