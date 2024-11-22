@@ -39,14 +39,40 @@ export default class Grid extends Phaser.GameObjects.Container {
           cell.addSun();
         }
         cell.addWater(random < this.chanceToGen);
-
+        console.log(cell.plant, i,j);
+        if(cell.plant) {
+          //console.log("i,j", i,j);
+          cell.plant.levelUp(this.countAdjacentPlants(i,j));
+        }
+        
         cell.updateIndicators();
-        // check parameters for plant leveling
       }
     }
   }
 
   getCell(x, y) {
     return this.cells[y][x];
+  }
+
+  countAdjacentPlants(x,y) {
+    let neighbors = 0;
+    //console.log(this.getCell(x,y++));
+    if(this.cells[x][y++].plant) {
+      neighbors++;
+      console.log(x + " " + y++ + " [x][y++] " + this.cells[x][y++].plant);
+    }
+    if(this.cells[x][y--].plant) {
+      neighbors++;
+      console.log(x + " " + y-- + " [x][y--]");
+    }
+    if(this.cells[x++][y].plant) {
+      neighbors++;
+      console.log(x++ + " " + y + " [x++][y]");
+    }
+    if(this.cells[x--][y].plant) {
+      neighbors++;
+      console.log(x-- + " " + y + " [x--][y]");
+    }
+    
   }
 }
