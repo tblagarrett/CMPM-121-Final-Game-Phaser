@@ -2,6 +2,7 @@ import { Cell } from "./prefabs/Cell";
 import { Grid } from "./prefabs/Grid";
 import { Plant } from "./prefabs/Plant";
 import { Game } from "./scenes/Game";
+import { End } from "./scenes/End";
 import { Preloader } from "./scenes/Preloader";
 
 //  Find out more information about the Game Config at:
@@ -25,7 +26,9 @@ const config = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: [Preloader, Game],
+  scene: [Preloader, Game, End],
 };
 
 export default new Phaser.Game(config);
+
+export const { width, height } = config;

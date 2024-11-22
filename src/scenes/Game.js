@@ -36,8 +36,10 @@ export class Game extends Scene {
       this.gridSizeY,
       this.cellSize
     );
+    this.player.setDepth(1);
 
-    this.plantsReaped = 50;
+    this.plantsReaped = 0;
+    this.time = 0;
 
     // sow/reap input
     this.input.keyboard.on("keydown-SPACE", () => {
@@ -48,12 +50,11 @@ export class Game extends Scene {
 
   timeStep() {
     this.grid.timeStep();
+    this.time++;
   }
 
   sowOrReap(x, y) {
     let cell = this.grid.getCell(x, y);
-    this.plantsReaped++;
-    console.log(this.plantsReaped);
     if (cell.canSow()) {
       cell.sow();
     } else if (cell.canReap()) {
@@ -63,10 +64,9 @@ export class Game extends Scene {
   }
 
   checkForComplete() {
-    console.log("checking ");
     if (this.plantsReaped >= this.ENDGOAL) {
       this.scene.pause("Game");
-      this.scene.launch("End");
+      this.scene.launch("End", { time: this.time });
     }
   }
 }
