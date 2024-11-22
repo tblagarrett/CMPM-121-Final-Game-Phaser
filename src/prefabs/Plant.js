@@ -1,12 +1,13 @@
 import Phaser from "phaser";
 export class Plant extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y, type) {
-    super(scene, x, y, this.type);
+    super(scene, x, y, type);
     this.plant = null;
     this.waterStored = 0;
     this.sunStored = 0;
     this.level = 1;
     this.plantReq = 1;
+    this.type = type;
 
     if (this.type == 1) {
       this.maxLevel = 3;
