@@ -32,6 +32,15 @@ export class Preloader extends Scene {
       frameHeight: 32,
     });
     this.load.image("blank-cell", "Square.png");
+    this.load.image("plant1-level1", "plant1_L1.png");
+    this.load.image("plant1-level2", "plant1_L2.png");
+    this.load.image("plant1-level3", "plant1_L3.png");
+    this.load.image("plant2-level1", "plant2_L1.png");
+    this.load.image("plant2-level2", "plant2_L2.png");
+    this.load.image("plant2-level3", "plant2_L3.png");
+    this.load.image("plant2-level4", "plant2_L4.png");
+    this.load.image("plant3-level1", "plant3_L1.png");
+    this.load.image("plant3-level2", "plant3_L2.png");
   }
 
   create() {
