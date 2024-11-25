@@ -1,5 +1,6 @@
 import { Cell } from "./prefabs/Cell";
 import { Grid } from "./prefabs/Grid";
+import { SaveState } from "./prefabs/SaveState.js";
 import { Plant } from "./prefabs/Plant";
 import { Game } from "./scenes/Game";
 import { End } from "./scenes/End";

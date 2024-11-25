@@ -14,11 +14,11 @@ export default class Grid extends Phaser.GameObjects.Container {
     for (let i = 0; i < this.width; i++) {
       let row = [];
       for (let j = 0; j < this.height; j++) {
-        let newCell = new Cell(
-          this.scene,
+        const newCell = new Cell(
+          scene,
           i * cellSize,
           j * cellSize,
-          "blank-cell", // Cell Texture
+          "blank-cell",
           null,
           cellSize
         );
@@ -39,10 +39,10 @@ export default class Grid extends Phaser.GameObjects.Container {
           cell.addSun();
         }
         cell.addWater(random < this.chanceToGen / 2);
-        if(cell.plant) {
-          cell.plant.levelUp(this.countAdjacentPlants(i,j));
+        if (cell.plant) {
+          cell.plant.levelUp(this.countAdjacentPlants(i, j));
         }
-        
+
         cell.updateIndicators();
       }
     }
@@ -52,26 +52,25 @@ export default class Grid extends Phaser.GameObjects.Container {
     return this.cells[y][x];
   }
 
-  countAdjacentPlants(x,y) {
+  countAdjacentPlants(x, y) {
     let neighbors = 0;
-    if(y < this.height-1) {
-      if(this.cells[x][y+1].plant) {
+    if (y < this.height - 1) {
+      if (this.cells[x][y + 1].plant) {
         neighbors++;
       }
     }
-    if(y > 0) {
-      if(this.cells[x][y-1].plant) {
-        neighbors++;
-      }
-
-    }
-    if(x < this.width-1) {
-      if(this.cells[x+1][y].plant) {
+    if (y > 0) {
+      if (this.cells[x][y - 1].plant) {
         neighbors++;
       }
     }
-    if(x > 0) {
-      if(this.cells[x-1][y].plant) {
+    if (x < this.width - 1) {
+      if (this.cells[x + 1][y].plant) {
+        neighbors++;
+      }
+    }
+    if (x > 0) {
+      if (this.cells[x - 1][y].plant) {
         neighbors++;
       }
     }
