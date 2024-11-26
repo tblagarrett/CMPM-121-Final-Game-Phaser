@@ -26,18 +26,18 @@ class StateManager {
   }
 
   // Save buffer array to localStorage
-  saveToLocalStorage() {
+  saveToLocalStorage(slot = "save1") {
     const serializedBuffers = this.bufferArray.map((buf) =>
       this.arrayBufferToBase64(buf)
     );
-    localStorage.setItem("save", JSON.stringify(serializedBuffers));
+    localStorage.setItem(slot, JSON.stringify(serializedBuffers));
   }
 
   // Load buffer array from localStorage
-  loadFromLocalStorage() {
-    const serializedBuffers = JSON.parse(localStorage.getItem("save"));
+  loadFromLocalStorage(slot = "save1") {
+    const serializedBuffers = JSON.parse(localStorage.getItem(slot));
     if (!serializedBuffers) {
-      console.log("No saved game state found!");
+      console.log(`No saved game state found in slot ${slot}!`);
       return;
     }
     this.bufferArray = serializedBuffers.map((base64) =>
@@ -47,14 +47,14 @@ class StateManager {
   }
 
   // Add buffer to the array and save to localStorage
-  addBuffer(buffer) {
+  addBuffer(buffer, slot = "save1") {
     // If we are not at the end of the buffer array, remove all future states
     if (this.currentStateIndex < this.bufferArray.length - 1) {
       this.bufferArray = this.bufferArray.slice(0, this.currentStateIndex + 1);
     }
     this.bufferArray.push(buffer);
     this.currentStateIndex++;
-    this.saveToLocalStorage();
+    this.saveToLocalStorage(slot);
   }
 
   // Get the last buffer from the array
@@ -67,15 +67,15 @@ class StateManager {
   }
 
   // Save the game state
-  saveGameState(grid, actions) {
+  saveGameState(grid, actions, slot = "save1") {
     const buffer = this.saveState.save(grid, actions);
-    this.addBuffer(buffer);
-    console.log("Game state saved!");
+    this.addBuffer(buffer, slot);
+    console.log(`Game state saved in slot ${slot}!`);
   }
 
   // Load the game state
-  loadGameState(grid) {
-    this.loadFromLocalStorage();
+  loadGameState(grid, slot = "save1") {
+    this.loadFromLocalStorage(slot);
     const lastBuffer = this.getLastBuffer();
     if (!lastBuffer) return { grid: null, actions: [] };
 

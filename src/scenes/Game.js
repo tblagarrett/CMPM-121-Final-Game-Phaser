@@ -10,7 +10,8 @@ export class Game extends Scene {
   }
 
   init() {
-    this.ENDGOAL = 1;
+    this.ENDGOAL = 50;
+    this.saveSlot = "save1";
   }
 
   create() {
@@ -81,6 +82,25 @@ export class Game extends Scene {
         console.log("Redo performed!");
       }
     });
+
+    // Save slot selection inputs
+    this.input.keyboard.on("keydown-ONE", () => {
+      this.saveSlot = "save1";
+      this.loadGameState(this.saveSlot);
+      console.log("Selected save slot 1");
+    });
+
+    this.input.keyboard.on("keydown-TWO", () => {
+      this.saveSlot = "save2";
+      this.loadGameState(this.saveSlot);
+      console.log("Selected save slot 2");
+    });
+
+    this.input.keyboard.on("keydown-THREE", () => {
+      this.saveSlot = "save3";
+      this.loadGameState(this.saveSlot);
+      console.log("Selected save slot 3");
+    });
   }
 
   timeStep() {
@@ -110,12 +130,20 @@ export class Game extends Scene {
 
   // Save the game state
   saveGameState() {
-    this.StateManager.saveGameState(this.grid, this.player.actions);
+    console.log(this.saveSlot);
+    this.StateManager.saveGameState(
+      this.grid,
+      this.player.actions,
+      this.saveSlot
+    );
   }
 
   // Load the game state and immediately update the visuals
   loadGameState() {
-    const { grid, actions } = this.StateManager.loadGameState(this.grid);
+    const { grid, actions } = this.StateManager.loadGameState(
+      this.grid,
+      this.saveSlot
+    );
     if (!grid) return;
 
     // Update player state
