@@ -10,7 +10,7 @@ export class Game extends Scene {
   }
 
   init() {
-    this.ENDGOAL = 50;
+    this.ENDGOAL = 1;
   }
 
   create() {
@@ -42,7 +42,6 @@ export class Game extends Scene {
     this.player.setDepth(1);
 
     this.plantsReaped = 0;
-    this.time = 0;
 
     // Initialize StateManager
     this.StateManager = new StateManager(this.gridSizeX, this.gridSizeY);
@@ -105,7 +104,7 @@ export class Game extends Scene {
   checkForComplete() {
     if (this.plantsReaped >= this.ENDGOAL) {
       this.scene.pause("Game");
-      this.scene.launch("End", { time: this.time });
+      this.scene.launch("End", { time: this.player.actions.length });
     }
   }
 
