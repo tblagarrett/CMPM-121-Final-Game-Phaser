@@ -78,6 +78,7 @@ class SaveState {
     // Deserialize grid data
     for (let y = 0; y < this.gridHeight; y++) {
       for (let x = 0; x < this.gridWidth; x++) {
+        //console.log(offset, this.buffer.byteLength);
         const cell = grid.getCell(x, y);
 
         // Read cell data (water stored)
@@ -130,7 +131,6 @@ class SaveState {
     // Deserialize player actions
     const actionsLength = this.dataView.getInt32(offset);
     offset += Int32Array.BYTES_PER_ELEMENT;
-
     const actions = [];
     for (let i = 0; i < actionsLength; i++) {
       const action = {

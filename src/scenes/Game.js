@@ -62,9 +62,30 @@ export class Game extends Scene {
     this.input.keyboard.on("keydown-L", () => {
       this.loadGameState();
     });
+
+    this.input.keyboard.on("keydown-U", () => {
+      const { grid, actions } = this.StateManager.undo(this.grid);
+      if (grid) {
+        this.player.actions = actions;
+        this.player.reset();
+        this.updateGridVisuals();
+        console.log("Undo performed!");
+      }
+    });
+
+    this.input.keyboard.on("keydown-R", () => {
+      const { grid, actions } = this.StateManager.redo(this.grid);
+      if (grid) {
+        this.player.actions = actions;
+        this.player.reset();
+        this.updateGridVisuals();
+        console.log("Redo performed!");
+      }
+    });
   }
 
   timeStep() {
+    this.saveGameState();
     this.grid.timeStep();
     this.time++;
   }
@@ -73,9 +94,11 @@ export class Game extends Scene {
     let cell = this.grid.getCell(x, y);
     if (cell.canSow()) {
       cell.sow();
+      this.saveGameState();
     } else if (cell.canReap()) {
       cell.reap();
       this.plantsReaped++;
+      this.saveGameState();
     }
   }
 
