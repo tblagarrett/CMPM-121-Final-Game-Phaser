@@ -11,11 +11,8 @@ export class Player extends Phaser.GameObjects.Sprite {
     this.GAMEHEIGHT = gridSizeY;
 
     //
-    this.actions = [];
-    this.cell = {
-      i: Math.floor(this.x / this.CELLSIZE),
-      j: Math.floor(this.y / this.CELLSIZE),
-    };
+    this.cell = this.localToCell(x, y);
+    this.actions = [this.cell];
 
     // Add event listeners for key inputs
     this.scene.input.keyboard.on("keydown-LEFT", () =>
@@ -32,6 +29,28 @@ export class Player extends Phaser.GameObjects.Sprite {
     );
   }
 
+  localToCell(x, y) {
+    return {
+      i: Math.floor(x / this.CELLSIZE),
+      j: Math.floor(y / this.CELLSIZE),
+    };
+  }
+
+  cellToLocal(i, j) {
+    return {
+      x: i * this.CELLSIZE + this.CELLSIZE / 2,
+      y: j * this.CELLSIZE + this.CELLSIZE / 2,
+    };
+  }
+
+  reset() {
+    if (this.actions.length <= 0) return;
+    const { i, j } = this.actions[this.actions.length - 1];
+    const { x, y } = this.cellToLocal(i, j);
+    this.x = x;
+    this.y = y;
+  }
+
   move(x, y) {
     this.scene.timeStep();
 
@@ -40,10 +59,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     const newY = this.y + y;
 
     // Calculate new cell
-    const newCell = {
-      i: Math.floor(newX / this.CELLSIZE),
-      j: Math.floor(newY / this.CELLSIZE),
-    };
+    const newCell = this.localToCell(newX, newY);
 
     // Check if new cell is within bounds
     if (newCell.i < 0 || newCell.i >= this.GAMEWIDTH) return;

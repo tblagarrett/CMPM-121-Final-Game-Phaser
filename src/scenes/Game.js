@@ -2,7 +2,7 @@ import Cell from "../prefabs/Cell";
 import Grid from "../prefabs/Grid";
 import { Scene } from "phaser";
 import { Player } from "../prefabs/Player";
-import SaveState from "../prefabs/SaveState.js";
+import StateManager from "../prefabs/StateManager";
 
 export class Game extends Scene {
   constructor() {
@@ -19,9 +19,6 @@ export class Game extends Scene {
     this.gridSizeX = 10;
     this.gridSizeY = 10;
     this.cellSize = 80;
-
-    // Initialize SaveState
-    this.saveState = new SaveState(this.gridSizeX, this.gridSizeY);
 
     // Create grid and player
     this.grid = new Grid(
@@ -46,6 +43,10 @@ export class Game extends Scene {
 
     this.plantsReaped = 0;
     this.time = 0;
+
+    // Initialize StateManager
+    this.StateManager = new StateManager(this.gridSizeX, this.gridSizeY);
+    this.loadGameState();
 
     // sow/reap input
     this.input.keyboard.on("keydown-SPACE", () => {
@@ -87,14 +88,19 @@ export class Game extends Scene {
 
   // Save the game state
   saveGameState() {
-    this.saveState.saveGrid(this.grid);
-    console.log("Game state saved!");
+    this.StateManager.saveGameState(this.grid, this.player.actions);
   }
 
   // Load the game state and immediately update the visuals
   loadGameState() {
-    this.saveState.loadGrid(this.grid);
-    this.updateGridVisuals(); // Force update the visuals after loading the state
+    const { grid, actions } = this.StateManager.loadGameState(this.grid);
+    if (!grid) return;
+
+    // Update player state
+    this.player.actions = actions;
+    this.player.reset();
+
+    this.updateGridVisuals(); // Update visuals
     console.log("Game state loaded!");
   }
 
