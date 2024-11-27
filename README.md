@@ -5,6 +5,50 @@
 3. Push the changes
 4. Check github actions and pages
 
+# Devlog Entry - 11/27/2024
+
+## How we satisfied the software requirements
+
+- [F0.a]
+  - You control a character moving over a 2D grid.
+  - Same as last week.
+- [F0.b]
+  - You advance time manually in the turn-based simulation.
+  - Same as last week.
+- [F0.c]
+  - You can reap or sow plants on grid cells only when you are near them.
+  - Same as last week.
+- [F0.d]
+  - Grid cells have sun and water levels. The incoming sun and water for each cell is somehow randomly generated each turn. Sun energy cannot be stored in a cell (it is used immediately or lost) while water moisture can be slowly accumulated over several turns.
+  - Same as last week.
+- [F0.e]
+  - Each plant on the grid has a distinct type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
+  - Same as last week.
+- [F0.f]
+  - Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
+  - Same as last week.
+- [F0.g]
+  - A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
+  - Same as last week.
+- [F1.a]
+  - The important state of your game's grid must be backed by a single contiguous byte array in AoS or SoA format. If your game stores the grid state in multiple format, the byte array format must be the primary format (i.e. other formats are decoded from it as needed).
+  - The SaveState implementation we have included stores the game's grid state in a single contiguous byte array formatted in **AoS** style. Each cell's data is serialized sequentially into this byte array. Anything that uses the grid decodes it from the load function created in the class. ![F1.a data structure diagram](./Save.png)
+- [F1.b]
+  - The player must be able to manually save their progress in the game. This must allow them to load state and continue play another day (i.e. after quitting the game app). The player must be able to manage multiple save files/slots.
+  - The player is able to save their progress into multiple slots using the 1, 2, and 3 keys and pressing S and L. This allows the player to select a save file, save or load from it, and do the same with other saves. The StateManager writes a serialized version of the state to localStorage, which allows the game to be played even after reloading.
+- [F1.c]
+  - The game must implement an implicit auto-save system to support recovery from unexpected quits. (For example, when the game is launched, if an auto-save entry is present, the game might ask the player "do you want to continue where you left off?" The auto-save entry might or might not be visible among the list of manual save entries available for the player to load as part of F1.b.)
+  - Every game action, such as sowing or reaping, automatically saves the game into the currently selected slot. This means that when the game is loaded from that slot it will load from the most recent save in that slot, which could either be the player's manual save, or an autosave
+- [F1.d]
+  - The player must be able to undo every major choice (all the way back to the start of play), even from a saved game. They should be able to redo (undo of undo operations) multiple times.
+  - The StateManager holds a history of states, each added to the buffer when the game is saved. When the U key is pressed, the StateManager goes and loads the previous state in the history, going back to the beginning of the play session. If the player presses R, it goes back forwards into the history, which is written over once an action is made, effectively erasing the redo possibilites. If no more states are available to undo or redo, the system safely informs the player (e.g., "No more states to undo!").
+
+## Reflection
+
+Due to our time restrictions, we had scoped a super simple version of the project in the beginning. This allowed us to iterate swiftly on the small foundation we created in F0. That does not mean it was easy to get this up and running in time for the deadline, though. Some of the biggest changes we made were to force crunch on the team, since the deadlines required that we work outside of our normal hours and availability to get things shipped.
+
+For game design, this week involved a lot of technical changes which did not leave a lot of room for scope change or expansion of our ideas. We only really had the chance to implement the mechanics required. It did give us the chance to think about the choice to use Phaser, and contemplate how we would go about switching to Typescript. Overall, the plan has become more focused on sticking to a small achievable scope that will allow us to adapt quickly to the short deadlines and refactoring that has happened and will continue to happen. We are preparing for more rounds of fast iteration.
+
 # Devlog Entry - 11/21/2024
 
 ## How we satisfied the software requirements
