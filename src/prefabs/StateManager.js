@@ -53,7 +53,7 @@ class StateManager {
       this.bufferArray = this.bufferArray.slice(0, this.currentStateIndex + 1);
     }
     this.bufferArray.push(buffer);
-    this.currentStateIndex++;
+    this.currentStateIndex = this.bufferArray.length; // Ensure currentStateIndex is correct
     this.saveToLocalStorage(slot);
   }
 
@@ -63,6 +63,8 @@ class StateManager {
       console.log("No buffers available!");
       return null;
     }
+    console.log(this.currentStateIndex);
+
     return this.bufferArray[this.currentStateIndex];
   }
 
