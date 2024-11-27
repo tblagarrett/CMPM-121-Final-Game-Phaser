@@ -86,19 +86,19 @@ export class Game extends Scene {
     // Save slot selection inputs
     this.input.keyboard.on("keydown-ONE", () => {
       this.saveSlot = "save1";
-      this.loadGameState(this.saveSlot);
+      this.loadGameState();
       console.log("Selected save slot 1");
     });
 
     this.input.keyboard.on("keydown-TWO", () => {
       this.saveSlot = "save2";
-      this.loadGameState(this.saveSlot);
+      this.loadGameState();
       console.log("Selected save slot 2");
     });
 
     this.input.keyboard.on("keydown-THREE", () => {
       this.saveSlot = "save3";
-      this.loadGameState(this.saveSlot);
+      this.loadGameState();
       console.log("Selected save slot 3");
     });
   }
