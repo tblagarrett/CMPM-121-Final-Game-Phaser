@@ -52,7 +52,7 @@ export class Cell extends Phaser.GameObjects.Sprite {
 
   sow() {
     let type = getRandomInt(1, 3);
-    this.plant = new Plant(this.scene, this.y + (this.cellSize / 2), this.x + (this.cellSize / 2), type, "plant1-level1");
+    this.plant = new Plant(this.scene, this.y + (this.cellSize / 2), this.x + (this.cellSize / 2), type, 1);
 
     this.updateIndicators();
   }

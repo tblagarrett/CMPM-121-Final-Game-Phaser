@@ -98,21 +98,22 @@ class SaveState {
         const plantSunStored = this.dataView.getInt32(offset);
         offset += Int32Array.BYTES_PER_ELEMENT;
 
-        if (plantLevel !== -1) {
+        if (plantLevel != -1) {
           // If plant data exists, we need to replace the existing plant (if any)
           if (cell.plant) {
             // Destroy the existing plant sprite
             cell.plant.destroy();
           }
-
+          
+          
           // Create a new plant with the loaded data
           const plant = new Plant(
             grid.scene,
             x * grid.cellSize + grid.cellSize / 2,
             y * grid.cellSize + grid.cellSize / 2,
-            plantType
+            plantType,
+            plantLevel
           );
-          plant.level = plantLevel;
           plant.waterStored = plantWaterStored;
           plant.sunStored = plantSunStored;
 

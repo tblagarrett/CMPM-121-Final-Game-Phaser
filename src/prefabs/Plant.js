@@ -1,13 +1,14 @@
 import Phaser from "phaser";
 export class Plant extends Phaser.GameObjects.Sprite {
-  constructor(scene, x, y, type) {
+  constructor(scene, x, y, type, level) {
     let texture;
+    const spriteName = "plant" + type + "-level" + level;
     if (type === 1) {
-      texture = "plant1-level1";
+      texture = spriteName;
     } else if (type === 2) {
-      texture = "plant2-level1";
+      texture = spriteName;
     } else if (type === 3) {
-      texture = "plant3-level1";
+      texture = spriteName;
     }
     super(scene, x, y, texture);
     this.type = type;
@@ -15,7 +16,7 @@ export class Plant extends Phaser.GameObjects.Sprite {
     this.plant = null;
     this.waterStored = 0;
     this.sunStored = 0;
-    this.level = 1;
+    this.level = level;
     this.plantReq = 1;
 
     if (this.type == 1) {
