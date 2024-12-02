@@ -11,10 +11,13 @@ process.stdout.write(`${line}\n${msg}\n${line}\n`);
 
 module.exports = {
     mode: "production",
-    entry: "./src/main.js",
+    entry: "./src/main.ts",
     output: {
         path: path.resolve(process.cwd(), 'dist'),
         filename: "./bundle.min.js"
+    },
+    resolve: {
+        extensions: [".ts", ".js", ".json"]
     },
     devtool: false,
     performance: {
@@ -29,6 +32,12 @@ module.exports = {
                 use: {
                     loader: "babel-loader"
                 }
+            },
+            {
+                test: /\.tsx?$/,
+                exclude: /node_modules/,
+                loader: "ts-loader"
+
             },
             {
                 test: [/\.vert$/, /\.frag$/],

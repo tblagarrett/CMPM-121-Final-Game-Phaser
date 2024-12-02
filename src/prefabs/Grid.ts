@@ -1,7 +1,22 @@
 import Phaser from "phaser";
 import { Cell } from "./Cell";
+
 export default class Grid extends Phaser.GameObjects.Container {
-  constructor(scene, x, y, width, height, cellSize) {
+  public scene: Phaser.Scene;
+  public width: number;
+  public height: number;
+  public cellSize: number;
+  private chanceToGen: number;
+  private cells: Cell[][];
+
+  constructor(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    cellSize: number
+  ) {
     super(scene, x, y);
     this.scene = scene;
     this.width = width;
@@ -11,15 +26,16 @@ export default class Grid extends Phaser.GameObjects.Container {
 
     this.cells = [];
 
+    // Create the grid of cells
     for (let i = 0; i < this.width; i++) {
-      let row = [];
+      let row: Cell[] = [];
       for (let j = 0; j < this.height; j++) {
         const newCell = new Cell(
           scene,
           i * cellSize,
           j * cellSize,
           "blank-cell",
-          null,
+          undefined,
           cellSize
         );
         row.push(newCell);
@@ -30,7 +46,7 @@ export default class Grid extends Phaser.GameObjects.Container {
     this.scene.add.existing(this);
   }
 
-  timeStep() {
+  timeStep(): void {
     for (let i = 0; i < this.width; i++) {
       for (let j = 0; j < this.height; j++) {
         let random = Math.random();
@@ -48,11 +64,11 @@ export default class Grid extends Phaser.GameObjects.Container {
     }
   }
 
-  getCell(x, y) {
+  getCell(x: number, y: number): Cell {
     return this.cells[y][x];
   }
 
-  countAdjacentPlants(x, y) {
+  countAdjacentPlants(x: number, y: number): number {
     let neighbors = 0;
     if (y < this.height - 1) {
       if (this.cells[x][y + 1].plant) {

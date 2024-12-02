@@ -1,7 +1,22 @@
 import { Plant } from "./Plant";
+import { Cell } from "./Cell";
+import Grid from "./Grid";
 
-class SaveState {
-  constructor(gridWidth, gridHeight) {
+interface Action {
+  i: number;
+  j: number;
+}
+
+export class SaveState {
+  private gridWidth: number;
+  private gridHeight: number;
+  private BYTES_PER_CELL: number;
+  private BYTES_PER_ACTION: number;
+  private gridSize: number;
+  public buffer: ArrayBuffer | null;
+  public dataView: DataView | null;
+
+  constructor(gridWidth: number, gridHeight: number) {
     this.gridWidth = gridWidth;
     this.gridHeight = gridHeight;
     this.BYTES_PER_CELL = 5 * Int32Array.BYTES_PER_ELEMENT; // 1 cell + 4 plant attributes
@@ -12,7 +27,7 @@ class SaveState {
   }
 
   // Serialize grid data and player actions into the buffer
-  save(grid, actions) {
+  save(grid: Grid, actions: Action[]): ArrayBuffer {
     const actionsLength = actions.length;
     const totalSize =
       this.gridSize +
@@ -26,7 +41,7 @@ class SaveState {
     // Serialize grid data
     for (let y = 0; y < this.gridHeight; y++) {
       for (let x = 0; x < this.gridWidth; x++) {
-        const cell = grid.getCell(x, y);
+        const cell: Cell = grid.getCell(x, y);
 
         // Write cell data
         this.dataView.setInt32(offset, cell.waterStored);
@@ -37,7 +52,7 @@ class SaveState {
           this.dataView.setInt32(offset, cell.plant.level);
           offset += Int32Array.BYTES_PER_ELEMENT;
 
-          this.dataView.setInt32(offset, cell.plant.type);
+          this.dataView.setInt32(offset, cell.plant.plant_type);
           offset += Int32Array.BYTES_PER_ELEMENT;
 
           this.dataView.setInt32(offset, cell.plant.waterStored);
@@ -59,7 +74,7 @@ class SaveState {
     this.dataView.setInt32(offset, actionsLength);
     offset += Int32Array.BYTES_PER_ELEMENT;
 
-    for (let action of actions) {
+    for (const action of actions) {
       this.dataView.setInt32(offset, action.i);
       offset += Int32Array.BYTES_PER_ELEMENT;
       this.dataView.setInt32(offset, action.j);
@@ -70,16 +85,17 @@ class SaveState {
   }
 
   // Deserialize buffer data back into the grid and player actions
-  load(grid) {
-    if (!this.buffer) return { grid: null, actions: [] };
+  load(
+    grid: Grid
+  ): { grid: Grid; actions: Action[] } | { grid: null; actions: Action[] } {
+    if (!this.buffer || !this.dataView) return { grid: null, actions: [] };
 
     let offset = 0;
 
     // Deserialize grid data
     for (let y = 0; y < this.gridHeight; y++) {
       for (let x = 0; x < this.gridWidth; x++) {
-        //console.log(offset, this.buffer.byteLength);
-        const cell = grid.getCell(x, y);
+        const cell: Cell = grid.getCell(x, y);
 
         // Read cell data (water stored)
         cell.waterStored = this.dataView.getInt32(offset);
@@ -102,9 +118,8 @@ class SaveState {
           // Destroy the existing plant sprite
           cell.plant.destroy();
         }
-        if (plantLevel != -1) {
-          // If plant data exists, we need to replace the existing plant (if any)
-          // Create a new plant with the loaded data
+        if (plantLevel !== -1) {
+          // If plant data exists, create a new plant
           const plant = new Plant(
             grid.scene,
             x * grid.cellSize + grid.cellSize / 2,
@@ -130,9 +145,9 @@ class SaveState {
     // Deserialize player actions
     const actionsLength = this.dataView.getInt32(offset);
     offset += Int32Array.BYTES_PER_ELEMENT;
-    const actions = [];
+    const actions: Action[] = [];
     for (let i = 0; i < actionsLength; i++) {
-      const action = {
+      const action: Action = {
         i: this.dataView.getInt32(offset),
         j: this.dataView.getInt32(offset + Int32Array.BYTES_PER_ELEMENT),
       };

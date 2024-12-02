@@ -1,14 +1,16 @@
-import { Cell } from "./prefabs/Cell";
-import { Grid } from "./prefabs/Grid";
-import { SaveState } from "./prefabs/SaveState.js";
-import { Plant } from "./prefabs/Plant";
+// import { Cell } from "./prefabs/Cell";
+// import Grid from "./prefabs/Grid";
+// import { SaveState } from "./prefabs/SaveState";
+// import { Plant } from "./prefabs/Plant";
 import { Game } from "./scenes/Game";
 import { End } from "./scenes/End";
 import { Preloader } from "./scenes/Preloader";
 
+import { Types } from "phaser";
+
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
-const config = {
+const config: Types.Core.GameConfig = {
   type: Phaser.AUTO,
   width: 800,
   height: 800,

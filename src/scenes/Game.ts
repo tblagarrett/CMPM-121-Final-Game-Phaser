@@ -1,20 +1,31 @@
-import Cell from "../prefabs/Cell";
 import Grid from "../prefabs/Grid";
-import { Scene } from "phaser";
 import { Player } from "../prefabs/Player";
 import StateManager from "../prefabs/StateManager";
 
-export class Game extends Scene {
+// Define the types for the grid, player, and other properties
+export class Game extends Phaser.Scene {
+  grid: Grid;
+  player: Player;
+  plantsReaped: number;
+  gridSizeX: number;
+  gridSizeY: number;
+  cellSize: number;
+  ENDGOAL: number;
+  saveSlot: string;
+  StateManager: StateManager;
+  time_steps: number;
+
   constructor() {
     super("Game");
   }
 
-  init() {
-    this.ENDGOAL = 50;
+  init(): void {
+    this.ENDGOAL = 10;
     this.saveSlot = "save1";
+    this.time_steps = 0;
   }
 
-  create() {
+  create(): void {
     this.cameras.main.setBackgroundColor(0xffffff);
 
     this.gridSizeX = 10;
@@ -49,21 +60,21 @@ export class Game extends Scene {
     this.loadGameState();
 
     // sow/reap input
-    this.input.keyboard.on("keydown-SPACE", () => {
+    this.input.keyboard?.on("keydown-SPACE", () => {
       this.sowOrReap(this.player.cell.i, this.player.cell.j);
       this.checkForComplete();
     });
 
     // Save/Load inputs
-    this.input.keyboard.on("keydown-S", () => {
+    this.input.keyboard?.on("keydown-S", () => {
       this.saveGameState();
     });
 
-    this.input.keyboard.on("keydown-L", () => {
+    this.input.keyboard?.on("keydown-L", () => {
       this.loadGameState();
     });
 
-    this.input.keyboard.on("keydown-U", () => {
+    this.input.keyboard?.on("keydown-U", () => {
       const { grid, actions } = this.StateManager.undo(this.grid);
       if (grid) {
         this.player.actions = actions;
@@ -73,7 +84,7 @@ export class Game extends Scene {
       }
     });
 
-    this.input.keyboard.on("keydown-R", () => {
+    this.input.keyboard?.on("keydown-R", () => {
       const { grid, actions } = this.StateManager.redo(this.grid);
       if (grid) {
         this.player.actions = actions;
@@ -84,32 +95,32 @@ export class Game extends Scene {
     });
 
     // Save slot selection inputs
-    this.input.keyboard.on("keydown-ONE", () => {
+    this.input.keyboard?.on("keydown-ONE", () => {
       this.saveSlot = "save1";
       this.loadGameState();
       console.log("Selected save slot 1");
     });
 
-    this.input.keyboard.on("keydown-TWO", () => {
+    this.input.keyboard?.on("keydown-TWO", () => {
       this.saveSlot = "save2";
       this.loadGameState();
       console.log("Selected save slot 2");
     });
 
-    this.input.keyboard.on("keydown-THREE", () => {
+    this.input.keyboard?.on("keydown-THREE", () => {
       this.saveSlot = "save3";
       this.loadGameState();
       console.log("Selected save slot 3");
     });
   }
 
-  timeStep() {
+  timeStep(): void {
     this.saveGameState();
     this.grid.timeStep();
-    this.time++;
+    this.time_steps++;
   }
 
-  sowOrReap(x, y) {
+  sowOrReap(x: number, y: number): void {
     let cell = this.grid.getCell(x, y);
     if (cell.canSow()) {
       cell.sow();
@@ -121,16 +132,15 @@ export class Game extends Scene {
     }
   }
 
-  checkForComplete() {
+  checkForComplete(): void {
     if (this.plantsReaped >= this.ENDGOAL) {
       this.scene.pause("Game");
-      this.scene.launch("End", { time: this.player.actions.length });
+      this.scene.launch("End", { time_steps: this.player.actions.length });
     }
   }
 
   // Save the game state
-  saveGameState() {
-    console.log(this.saveSlot);
+  saveGameState(): void {
     this.StateManager.saveGameState(
       this.grid,
       this.player.actions,
@@ -139,7 +149,7 @@ export class Game extends Scene {
   }
 
   // Load the game state and immediately update the visuals
-  loadGameState() {
+  loadGameState(): void {
     const { grid, actions } = this.StateManager.loadGameState(
       this.grid,
       this.saveSlot
@@ -155,11 +165,11 @@ export class Game extends Scene {
   }
 
   // Force update the grid visuals after loading the game state
-  updateGridVisuals() {
+  updateGridVisuals(): void {
     for (let i = 0; i < this.grid.width; i++) {
       for (let j = 0; j < this.grid.height; j++) {
         let cell = this.grid.getCell(i, j);
-        cell.updateIndicators(); // Update each cell's visual indicators
+        cell.updateIndicators();
       }
     }
   }
