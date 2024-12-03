@@ -5,6 +5,82 @@
 3. Push the changes
 4. Check github actions and pages
 
+# Devlog Entry - 12/2/2024
+
+## How we satisfied the software requirements
+
+### F0+F1
+
+- [F0.a]
+  - You control a character moving over a 2D grid.
+  - Same as last week.
+- [F0.b]
+  - You advance time manually in the turn-based simulation.
+  - Same as last week.
+- [F0.c]
+  - You can reap or sow plants on grid cells only when you are near them.
+  - Same as last week.
+- [F0.d]
+  - Grid cells have sun and water levels. The incoming sun and water for each cell is somehow randomly generated each turn. Sun energy cannot be stored in a cell (it is used immediately or lost) while water moisture can be slowly accumulated over several turns.
+  - Same as last week.
+- [F0.e]
+  - Each plant on the grid has a distinct type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
+  - Same as last week.
+- [F0.f]
+  - Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
+  - Same as last week. (WILL CHANGE THIS WEEK)
+- [F0.g]
+  - A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
+  - Same as last week.
+- [F1.a]
+  - The important state of your game's grid must be backed by a single contiguous byte array in AoS or SoA format. If your game stores the grid state in multiple format, the byte array format must be the primary format (i.e. other formats are decoded from it as needed).
+  - Same as last week.
+- [F1.b]
+  - The player must be able to manually save their progress in the game. This must allow them to load state and continue play another day (i.e. after quitting the game app). The player must be able to manage multiple save files/slots.
+  - Same as last week.
+- [F1.c]
+  - The game must implement an implicit auto-save system to support recovery from unexpected quits. (For example, when the game is launched, if an auto-save entry is present, the game might ask the player "do you want to continue where you left off?" The auto-save entry might or might not be visible among the list of manual save entries available for the player to load as part of F1.b.)
+  - Same as last week.
+- [F1.d]
+  - The player must be able to undo every major choice (all the way back to the start of play), even from a saved game. They should be able to redo (undo of undo operations) multiple times.
+  - Same as last week.
+
+### External DSL for Scenario Design
+
+CHANGE THIS BEFORE SUBMITTING
+
+The devlog should explain the design of your external DSL for scenario design. Tell us which pre-existing data language (e.g. JSON/YAML/TOML) your DSL is based on. If it is not based on a pre-existing language, briefly explain your choice. Show us a short example of a scenario definition in this new language (even if it doesn't exactly match one used in your game's actual code). Next to the code example, give us a natural language translation of the meaning of that program so we can begin to learn how your language works.
+
+### Internal DSL for Plants and Growth Conditions
+
+CHANGE THIS BEFORE SUBMITTING
+
+Using one or more short code examples (possibly with irrelevant or repetitive blocks removed with "/_ ... _/" comments), show us what it like to use your DSL. Comment on which host language is being used (because the person reading your devlog might not have read the rest of your project's code to guess which language you are using). After the code example, explain the meaning of your code snippets in natural language to help us understand the meaning.
+
+Make sure to highlight how your internal DSL allows using host language features that would be difficult to offer in an external DSL.
+
+### Switch to Alternate Platform
+
+The switch that we decided to do was from Javascript to Typescript. We made that switch for a few reasons:
+
+- It allowed us to ensure type safety, reducing the runtime errors.
+- Gave us the chance to catch bugs at compile time instead of runtime
+- Made code easier to write with better code completion
+
+What we carried over was the existing JavaScript logic, structures, and algorithms; as well as the Phaser 3 API as it supports both Javascript and Typescript.
+
+When we did created the original project, it was done using a Webpack Javascript template made by the Phaser team. They also had a Typescript template, which made the swapping process simpler, as we could update the preexisting files and then change the Javascript ones to Typescript.
+
+That did not come without any problems, as we ran into a few. There were problems related to handling dynamic imports, identifying and correcting areas where implicit any types were used, and updating the development workflow to include TypeScript compilation.
+
+In general, we did not have to change much about the previous concepts because of our preparation in F0.
+
+## Reflection
+
+CHANGE THIS BEFORE SUBMITTING
+
+Looking back on how you achieved the new F2 requirements, how has your team’s plan changed? Did you reconsider any of the choices you previously described for Tools and Materials or your Roles? Has your game design evolved now that you've started to think about giving the player more feedback? It would be very suspicious if you didn’t need to change anything. There’s learning value in you documenting how your team’s thinking has changed over time.
+
 # Devlog Entry - 11/27/2024
 
 ## How we satisfied the software requirements
