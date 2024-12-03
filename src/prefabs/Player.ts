@@ -1,11 +1,16 @@
 import { Game } from "../scenes/Game"; // Import the Game class
 
+// based on grid cells
+export interface Position {
+  i: number;
+  j: number;
+}
+
 export class Player extends Phaser.GameObjects.Sprite {
   private CELLSIZE: number;
   private GAMEWIDTH: number;
   private GAMEHEIGHT: number;
-  public cell: { i: number; j: number };
-  public actions: { i: number; j: number }[];
+  public position: Position;
   private gameScene: Game;
 
   constructor(
@@ -29,8 +34,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     this.GAMEHEIGHT = gridSizeY;
 
     // Initialize cell and actions
-    this.cell = this.localToCell(x, y);
-    this.actions = [this.cell];
+    this.position = this.localToCell(x, y);
 
     // Add event listeners for key inputs
     this.scene.input?.keyboard?.on("keydown-LEFT", () =>
@@ -61,10 +65,9 @@ export class Player extends Phaser.GameObjects.Sprite {
     };
   }
 
-  reset(): void {
-    if (this.actions.length <= 0) return;
-    const { i, j } = this.actions[this.actions.length - 1];
-    const { x, y } = this.cellToLocal(i, j);
+  reset(position: Position): void {
+    this.position = position;
+    const { x, y } = this.cellToLocal(position.i, position.j);
     this.x = x;
     this.y = y;
   }
@@ -86,7 +89,6 @@ export class Player extends Phaser.GameObjects.Sprite {
     // Update player position and current cell
     this.x = newX;
     this.y = newY;
-    this.cell = newCell;
-    this.actions.push({ ...this.cell });
+    this.position = newCell;
   }
 }

@@ -61,7 +61,7 @@ export class Game extends Phaser.Scene {
 
     // sow/reap input
     this.input.keyboard?.on("keydown-SPACE", () => {
-      this.sowOrReap(this.player.cell.i, this.player.cell.j);
+      this.sowOrReap(this.player.position.i, this.player.position.j);
       this.checkForComplete();
     });
 
@@ -75,20 +75,19 @@ export class Game extends Phaser.Scene {
     });
 
     this.input.keyboard?.on("keydown-U", () => {
-      const { grid, actions } = this.StateManager.undo(this.grid);
+      const { grid, position } = this.StateManager.undo(this.grid);
+      console.log(position);
       if (grid) {
-        this.player.actions = actions;
-        this.player.reset();
+        this.player.reset(position);
         this.updateGridVisuals();
         console.log("Undo performed!");
       }
     });
 
     this.input.keyboard?.on("keydown-R", () => {
-      const { grid, actions } = this.StateManager.redo(this.grid);
+      const { grid, position } = this.StateManager.redo(this.grid);
       if (grid) {
-        this.player.actions = actions;
-        this.player.reset();
+        this.player.reset(position);
         this.updateGridVisuals();
         console.log("Redo performed!");
       }
@@ -135,7 +134,7 @@ export class Game extends Phaser.Scene {
   checkForComplete(): void {
     if (this.plantsReaped >= this.ENDGOAL) {
       this.scene.pause("Game");
-      this.scene.launch("End", { time_steps: this.player.actions.length });
+      this.scene.launch("End", { time_steps: 0 });
     }
   }
 
@@ -143,22 +142,21 @@ export class Game extends Phaser.Scene {
   saveGameState(): void {
     this.StateManager.saveGameState(
       this.grid,
-      this.player.actions,
+      this.player.position,
       this.saveSlot
     );
   }
 
   // Load the game state and immediately update the visuals
   loadGameState(): void {
-    const { grid, actions } = this.StateManager.loadGameState(
+    const { grid, position } = this.StateManager.loadGameState(
       this.grid,
       this.saveSlot
     );
     if (!grid) return;
 
     // Update player state
-    this.player.actions = actions;
-    this.player.reset();
+    this.player.reset(position);
 
     this.updateGridVisuals(); // Update visuals
     console.log("Game state loaded!");

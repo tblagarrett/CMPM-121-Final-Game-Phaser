@@ -64,29 +64,29 @@ export default class Grid extends Phaser.GameObjects.Container {
     }
   }
 
-  getCell(x: number, y: number): Cell {
-    return this.cells[y][x];
+  getCell(i: number, j: number): Cell {
+    return this.cells[i][j];
   }
 
-  countAdjacentPlants(x: number, y: number): number {
+  countAdjacentPlants(i: number, j: number): number {
     let neighbors = 0;
-    if (y < this.height - 1) {
-      if (this.cells[x][y + 1].plant) {
+    if (j < this.height - 1) {
+      if (this.cells[i][j + 1].plant) {
         neighbors++;
       }
     }
-    if (y > 0) {
-      if (this.cells[x][y - 1].plant) {
+    if (j > 0) {
+      if (this.cells[i][j - 1].plant) {
         neighbors++;
       }
     }
-    if (x < this.width - 1) {
-      if (this.cells[x + 1][y].plant) {
+    if (i < this.width - 1) {
+      if (this.cells[i + 1][j].plant) {
         neighbors++;
       }
     }
-    if (x > 0) {
-      if (this.cells[x - 1][y].plant) {
+    if (i > 0) {
+      if (this.cells[i - 1][j].plant) {
         neighbors++;
       }
     }

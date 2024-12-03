@@ -1,11 +1,7 @@
 import { Plant } from "./Plant";
 import { Cell } from "./Cell";
 import Grid from "./Grid";
-
-interface Action {
-  i: number;
-  j: number;
-}
+import { Position } from "./Player";
 
 export class SaveState {
   private gridWidth: number;
@@ -27,12 +23,8 @@ export class SaveState {
   }
 
   // Serialize grid data and player actions into the buffer
-  save(grid: Grid, actions: Action[]): ArrayBuffer {
-    const actionsLength = actions.length;
-    const totalSize =
-      this.gridSize +
-      Int32Array.BYTES_PER_ELEMENT +
-      actionsLength * this.BYTES_PER_ACTION;
+  save(grid: Grid, position: Position): ArrayBuffer {
+    const totalSize = this.gridSize + this.BYTES_PER_ACTION; // Only one action (i, j)
     this.buffer = new ArrayBuffer(totalSize);
     this.dataView = new DataView(this.buffer);
 
@@ -70,16 +62,11 @@ export class SaveState {
       }
     }
 
-    // Serialize player actions
-    this.dataView.setInt32(offset, actionsLength);
+    // Serialize the single action
+    this.dataView.setInt32(offset, position.i);
     offset += Int32Array.BYTES_PER_ELEMENT;
-
-    for (const action of actions) {
-      this.dataView.setInt32(offset, action.i);
-      offset += Int32Array.BYTES_PER_ELEMENT;
-      this.dataView.setInt32(offset, action.j);
-      offset += Int32Array.BYTES_PER_ELEMENT;
-    }
+    this.dataView.setInt32(offset, position.j);
+    offset += Int32Array.BYTES_PER_ELEMENT;
 
     return this.buffer;
   }
@@ -87,8 +74,9 @@ export class SaveState {
   // Deserialize buffer data back into the grid and player actions
   load(
     grid: Grid
-  ): { grid: Grid; actions: Action[] } | { grid: null; actions: Action[] } {
-    if (!this.buffer || !this.dataView) return { grid: null, actions: [] };
+  ): { grid: Grid; position: Position } | { grid: null; position: Position } {
+    if (!this.buffer || !this.dataView)
+      return { grid: null, position: { i: 0, j: 0 } };
 
     let offset = 0;
 
@@ -142,20 +130,13 @@ export class SaveState {
       }
     }
 
-    // Deserialize player actions
-    const actionsLength = this.dataView.getInt32(offset);
-    offset += Int32Array.BYTES_PER_ELEMENT;
-    const actions: Action[] = [];
-    for (let i = 0; i < actionsLength; i++) {
-      const action: Action = {
-        i: this.dataView.getInt32(offset),
-        j: this.dataView.getInt32(offset + Int32Array.BYTES_PER_ELEMENT),
-      };
-      actions.push(action);
-      offset += this.BYTES_PER_ACTION;
-    }
+    // Deserialize the single action
+    const position: Position = {
+      i: this.dataView.getInt32(offset),
+      j: this.dataView.getInt32(offset + Int32Array.BYTES_PER_ELEMENT),
+    };
 
-    return { grid, actions };
+    return { grid, position };
   }
 }
 

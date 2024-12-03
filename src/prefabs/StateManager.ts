@@ -1,9 +1,11 @@
+import { Position } from "./Player";
 import SaveState from "./SaveState";
 
 class StateManager {
   private bufferArray: ArrayBuffer[] = [];
   private currentStateIndex: number = -1;
   private saveState: SaveState;
+  private currentSlot: string = "save1"; // Track the current slot
 
   constructor(gridWidth: number, gridHeight: number) {
     this.saveState = new SaveState(gridWidth, gridHeight);
@@ -33,6 +35,13 @@ class StateManager {
   }
 
   loadFromLocalStorage(slot: string = "save1"): void {
+    if (slot !== this.currentSlot) {
+      // Clear bufferArray and reset currentStateIndex when switching slots
+      this.bufferArray = [];
+      this.currentStateIndex = -1;
+      this.currentSlot = slot;
+    }
+
     const serializedBuffers = JSON.parse(localStorage.getItem(slot) || "null");
     if (!serializedBuffers) {
       console.log(`No saved game state found in slot ${slot}!`);
@@ -61,31 +70,31 @@ class StateManager {
     return this.bufferArray[this.currentStateIndex];
   }
 
-  saveGameState(grid: any, actions: any[], slot: string = "save1"): void {
-    const buffer = this.saveState.save(grid, actions);
+  saveGameState(grid: any, position: Position, slot: string = "save1"): void {
+    const buffer = this.saveState.save(grid, position);
     this.addBuffer(buffer, slot);
   }
 
   loadGameState(
     grid: any,
     slot: string = "save1"
-  ): { grid: any; actions: any[] } {
+  ): { grid: any; position: Position } {
     this.loadFromLocalStorage(slot);
     const lastBuffer = this.getLastBuffer();
-    if (!lastBuffer) return { grid: null, actions: [] };
+    if (!lastBuffer) return { grid: null, position: { i: 0, j: 0 } };
 
     this.saveState.buffer = lastBuffer;
     this.saveState.dataView = new DataView(lastBuffer);
 
     if (!grid) {
       console.error("Grid is not initialized");
-      return { grid: null, actions: [] };
+      return { grid: null, position: { i: 0, j: 0 } };
     }
 
     return this.saveState.load(grid);
   }
 
-  undo(grid: any): { grid: any; actions: any[] } {
+  undo(grid: any): { grid: any; position: Position } {
     if (this.currentStateIndex > 0) {
       this.currentStateIndex--;
       const buffer = this.getLastBuffer();
@@ -94,11 +103,11 @@ class StateManager {
       return this.saveState.load(grid);
     } else {
       console.log("No more states to undo!");
-      return { grid: null, actions: [] };
+      return { grid: null, position: { i: 0, j: 0 } };
     }
   }
 
-  redo(grid: any): { grid: any; actions: any[] } {
+  redo(grid: any): { grid: any; position: Position } {
     if (this.currentStateIndex < this.bufferArray.length - 1) {
       this.currentStateIndex++;
       const buffer = this.getLastBuffer()!;
@@ -107,7 +116,7 @@ class StateManager {
       return this.saveState.load(grid);
     } else {
       console.log("No more states to redo!");
-      return { grid: null, actions: [] };
+      return { grid: null, position: { i: 0, j: 0 } };
     }
   }
 }
