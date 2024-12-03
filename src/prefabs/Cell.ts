@@ -69,8 +69,7 @@ export class Cell extends Phaser.GameObjects.Sprite {
       this.scene,
       this.y + this.cellSize / 2,
       this.x + this.cellSize / 2,
-      type,
-      1
+      type
     );
 
     this.updateIndicators();

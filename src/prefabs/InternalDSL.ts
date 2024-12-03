@@ -4,10 +4,10 @@ import { Cell } from "./Cell";
 import Grid from "./Grid";
 import { Game } from "../scenes/Game"; 
 
-interface PlantConfig {
-    name: string;
+export interface PlantConfig {
+    num: number;
     water: number; 
-    light: number; 
+    sun: number; 
     neighbors: number;
     level: number;
 }
@@ -19,8 +19,8 @@ export class InternalDSL {
         return new InternalDSL();
     }
 
-    definePlantType(name: string, water: number, light: number, neighbors: number, level: number): this {
-        const config = {name, water, light, neighbors, level};
+    definePlantType(num: number, water: number, sun: number, neighbors: number, level: number): this {
+        const config = {num, water, sun, neighbors, level};
         this.plants.push(config);
         return this;
     }

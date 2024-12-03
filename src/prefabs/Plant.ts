@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { PlantConfig } from "./InternalDSL";
 
 export class Plant extends Phaser.GameObjects.Sprite {
   plant_type: number;
@@ -14,25 +15,28 @@ export class Plant extends Phaser.GameObjects.Sprite {
     scene: Phaser.Scene,
     x: number,
     y: number,
-    type: number,
-    level: number
+    type: PlantConfig,
+    //level: number
   ) {
     let texture: string;
-    const spriteName = `plant${type}-level${level}`;
-    if (type === 1 || type === 2 || type === 3) {
+    const spriteName = `plant${type.num}-level${type.level}`;
+    if (type.num === 1 || type.num === 2 || type.num === 3) {
       texture = spriteName;
     } else {
       throw new Error("Invalid plant type");
     }
     super(scene, x, y, texture);
 
-    this.plant_type = type;
+    this.plant_type = type.num;
     this.waterStored = 0;
     this.sunStored = 0;
-    this.level = level;
-    this.plantReq = 1;
+    this.level = type.level;
+    this.plantReq = type.neighbors;
+    this.maxLevel = type.level;
+    this.maxSun = type.sun;
+    this.maxWater = type.water;
 
-    if (this.plant_type === 1) {
+    /*if (this.plant_type === 1) {
       this.maxLevel = 3;
       this.maxSun = 5;
       this.maxWater = 8;
@@ -46,7 +50,7 @@ export class Plant extends Phaser.GameObjects.Sprite {
       this.maxWater = 10;
     } else {
       throw new Error("Invalid plant type"); // Defensive check for unsupported types
-    }
+    }*/
 
     this.scene.add.existing(this);
     this.setDisplaySize(80, 80);
