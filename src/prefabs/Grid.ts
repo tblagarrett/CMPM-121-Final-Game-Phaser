@@ -65,7 +65,7 @@ export default class Grid extends Phaser.GameObjects.Container {
   }
 
   getCell(i: number, j: number): Cell {
-    return this.cells[i][j];
+    return this.cells[j][i];
   }
 
   countAdjacentPlants(i: number, j: number): number {
