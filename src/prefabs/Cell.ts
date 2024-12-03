@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { Plant } from "./Plant";
+import { InternalDSL } from "./InternalDSL";
 
 export class Cell extends Phaser.GameObjects.Sprite {
   cellSize: number;
@@ -10,6 +11,7 @@ export class Cell extends Phaser.GameObjects.Sprite {
   plantText: Phaser.GameObjects.Text;
   isPlantThere: number;
   sprite: Phaser.GameObjects.Sprite;
+  plantTypes: InternalDSL;
 
   constructor(
     scene: Phaser.Scene,
@@ -62,7 +64,7 @@ export class Cell extends Phaser.GameObjects.Sprite {
 
   // Sow a new plant
   sow(): void {
-    const type = getRandomInt(1, 3);
+    const type = this.plantTypes.getRandPlantType();
     this.plant = new Plant(
       this.scene,
       this.y + this.cellSize / 2,
