@@ -7,7 +7,7 @@ export class SaveState {
   private gridWidth: number;
   private gridHeight: number;
   private BYTES_PER_CELL: number;
-  private BYTES_PER_ACTION: number;
+  private BYTES_PER_PLAYER_POSITION: number;
   private gridSize: number;
   public buffer: ArrayBuffer | null;
   public dataView: DataView | null;
@@ -16,7 +16,7 @@ export class SaveState {
     this.gridWidth = gridWidth;
     this.gridHeight = gridHeight;
     this.BYTES_PER_CELL = 5 * Int32Array.BYTES_PER_ELEMENT; // 1 cell + 4 plant attributes
-    this.BYTES_PER_ACTION = 2 * Int32Array.BYTES_PER_ELEMENT; // 2 integers per action (x, y)
+    this.BYTES_PER_PLAYER_POSITION = 2 * Int32Array.BYTES_PER_ELEMENT; // 2 integers per action (x, y)
     this.gridSize = gridWidth * gridHeight * this.BYTES_PER_CELL;
     this.buffer = null;
     this.dataView = null;
@@ -24,7 +24,7 @@ export class SaveState {
 
   // Serialize grid data and player actions into the buffer
   save(grid: Grid, position: Position): ArrayBuffer {
-    const totalSize = this.gridSize + this.BYTES_PER_ACTION; // Only one action (i, j)
+    const totalSize = this.gridSize + this.BYTES_PER_PLAYER_POSITION; // Only one action (i, j)
     this.buffer = new ArrayBuffer(totalSize);
     this.dataView = new DataView(this.buffer);
 

@@ -1,0 +1,49 @@
+{
+  "weather": {
+    "random": true,
+    "waterFrequency": 0.5,
+    "sunFrequency": 0.5,
+    "events": [
+      {
+        "name": "Rain Storm",
+        "description": "No sun, lots of water",
+        "sunFrequency": 0,
+        "waterFrequency": 1
+      },
+      {
+        "name": "Drought",
+        "description": "Lots of sun, no water",
+        "sunFrequency": 1,
+        "waterFrequency": 0
+      }
+    ]
+  },
+  "plants": [
+    {
+      "type": 1,
+      "waterRequired": 5,
+      "sunRequired": 3,
+      "neighborsRequired": 2
+    },
+    {
+      "type": 2,
+      "waterRequired": 3,
+      "sunRequired": 5,
+      "neighborsRequired": 1
+    },
+    {
+      "type": 3,
+      "waterRequired": 4,
+      "sunRequired": 4,
+      "neighborsRequired": 3
+    }
+  ],
+  "victoryConditions": {
+    "typeSpecific": {
+      "type1": 10,
+      "type2": 5,
+      "type3": 5
+    },
+    "overallHarvest": 20
+  }
+}
