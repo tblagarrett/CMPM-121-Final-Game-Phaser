@@ -15,7 +15,7 @@ export class Plant extends Phaser.GameObjects.Sprite {
     scene: Phaser.Scene,
     x: number,
     y: number,
-    type: PlantConfig,
+    type: PlantConfig
     //level: number
   ) {
     let texture: string;
