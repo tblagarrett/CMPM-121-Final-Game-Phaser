@@ -53,23 +53,79 @@ The devlog should explain the design of your external DSL for scenario design. T
 
 ### Internal DSL for Plants and Growth Conditions
 
-CHANGE THIS BEFORE SUBMITTING
+**Host Language: TypeScript**
 
-Using one or more short code examples (possibly with irrelevant or repetitive blocks removed with "/_ ... _/" comments), show us what it like to use your DSL. Comment on which host language is being used (because the person reading your devlog might not have read the rest of your project's code to guess which language you are using). After the code example, explain the meaning of your code snippets in natural language to help us understand the meaning.
+Following is a code example showing how one could use our internalDSL in a Phaser-based game:
 
-Make sure to highlight how your internal DSL allows using host language features that would be difficult to offer in an external DSL.
+```// Internal DSL definition and usage
+const plantDSL = InternalDSL.create();
+
+// Define three plant types with distinct growth conditions
+plantDSL
+  .definePlantType(1, 8, 5, 2, 3) // Requires 8 water, 5 sunlight, 2 neighbors, max level 3
+  .definePlantType(2, 5, 3, 2, 4) // Requires 5 water, 3 sunlight, 2 neighbors, max level 4
+  .definePlantType(3, 10, 8, 2, 2); // Requires 10 water, 8 sunlight, 2 neighbors, max level 2
+
+// Retrieve a plant type for spawning in a game cell
+const randomPlantType = plantDSL.getRandPlantType();
+```
+
+**Explanation:**
+
+In this, we are able to create three different types of plants that each have their own growth conditions. Afterwards, we can call the DSL to get a random plant type when we want to make any plant in the future.
+
+This ensures that each plant has structurally unique conditions, such as in this example where:
+
+- Plant 1 is focused on moderate water and sunlight.
+- Plant 2 prioritizes balance but has a higher growth level.
+- Plant 3 thrives in abundant resources but has a lower max level.
+
+**Advantages of the Internal DSL**
+
+The largest advantage of the internal DSL is being able to use the features of Typescript to simplify development in ways that would be difficult for an external DSL.
+
+For Example, our `sow()` function:
+
+```
+sow(): void {
+  const type = this.plantTypes.getRandPlantType(); // Randomly select a plant type
+  this.plant = new Plant(
+    this.scene,
+    this.y + this.cellSize / 2,
+    this.x + this.cellSize / 2,
+    type
+  );
+
+  this.updateIndicators();
+}
+```
+
+the `getRandPlantType()` selects a `PlantConfig` object from the DSL's internal storage and passes it directly to the Plant constructor, which uses multiple TypeScript-specific features:
+
+- **Dynamic Object Creation:**
+  The `PlantConfig` returned by `getRandPlantType()` can immediately be used to instantiate a Plant without any additional parsing or transformation.
+- **Type Safety:**
+  Since the internal DSL is written in TypeScript, the PlantConfig type ensures that all required fields (e.g., water, sun, level) are present and correctly typed, catching errors at compile time.
+- **Seamless Runtime Integration:**
+  Functions like `sow()` combine the internal DSL's configuration data logic like determining where the plant is placed and updating visual indicators. Achieving this level of integration with an external DSL would require a lot of extra work to execute.
+
+Overall, our internal DSL allowed us to make a plant system that could be easily modified while making plants that all had different growth conditions
 
 ### Switch to Alternate Platform
 
-The switch that we decided to do was from Javascript to Typescript. We made that switch for a few reasons:
+**Javascript to Typescript**
+
+We made the switch from Javascript to Typescript for a few reasons:
 
 - It allowed us to ensure type safety, reducing the runtime errors.
 - Gave us the chance to catch bugs at compile time instead of runtime
 - Made code easier to write with better code completion
 
+**How It Was Done**
+
 What we carried over was the existing JavaScript logic, structures, and algorithms; as well as the Phaser 3 API as it supports both Javascript and Typescript.
 
-When we did created the original project, it was done using a Webpack Javascript template made by the Phaser team. They also had a Typescript template, which made the swapping process simpler, as we could update the preexisting files and then change the Javascript ones to Typescript.
+When we created the original project, it was done using a Webpack Javascript template made by the Phaser team. They also had a Typescript template, which made the swapping process simpler, as we could update the preexisting files and then change the Javascript ones to Typescript.
 
 That did not come without any problems, as we ran into a few. There were problems related to handling dynamic imports, identifying and correcting areas where implicit any types were used, and updating the development workflow to include TypeScript compilation.
 
