@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memory Layout Diagram</title>
+    <style>
+      body {
+        font-family: "Courier New", Courier, monospace;
+        margin: 20px;
+        line-height: 1.5;
+        text-align: center;
+      }
+      table {
+        border-collapse: collapse;
+        width: 80%;
+        margin: 20px auto;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 10px;
+      }
+      th {
+        background-color: #f0f0f0;
+      }
+      caption {
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Cell Data Section -->
+    <h1>Memory Layout Diagram</h1>
+    <table>
+      <caption>
+        Cell Data:
+      </caption>
+      <thead>
+        <tr>
+          <th>Cell WaterStored (4 bytes)</th>
+          <th>Plant Level (4 bytes)</th>
+          <th>Plant Type (4 bytes)</th>
+          <th>Plant WaterStored (4 bytes)</th>
+          <th>Plant SunStored (4 bytes)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Player Position Section -->
+    <table>
+      <caption>
+        Player Position:
+      </caption>
+      <tbody>
+        <tr>
+          <td>Player Pos X (4 bytes)</td>
+          <td>Player Pos Y (4 bytes)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Explanation Section -->
+    <p>
+      For a gridWidth x gridHeight grid:<br />
+      Each cell occupies 20 bytes (5 fields x 4 bytes per field).<br />
+      The entire grid occupies gridWidth * gridHeight * 20 bytes.
+    </p>
+
+    <!-- Multiple Cells -->
+    <table>
+      <caption>
+        Cell 1:
+      </caption>
+      <tbody>
+        <tr>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table>
+      <caption>
+        Cell 2:
+      </caption>
+      <tbody>
+        <tr>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>...</p>
+
+    <table>
+      <caption>
+        Cell n:
+      </caption>
+      <tbody>
+        <tr>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+          <td>4 bytes</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Full Array Layout -->
+    <table>
+      <caption>
+        FULL ARRAY LAYOUT:
+      </caption>
+      <tbody>
+        <tr>
+          <td>Grid Data (gridWidth x gridHeight x 20 bytes)</td>
+          <td>Player Position (8 bytes)</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

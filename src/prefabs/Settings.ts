@@ -48,8 +48,7 @@ class Settings {
 }
 
 // example on how to use:
-
-const json = fs.readFileSync("path/to/externalDSL.json", "utf8");
+const json = fs.readFileSync("~/externalDSL.json", "utf8");
 const settings = Settings.fromJSON(json);
 
 console.log(settings);
