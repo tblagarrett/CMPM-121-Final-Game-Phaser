@@ -9,6 +9,10 @@ export interface PlantConfig {
 export class InternalDSL {
   private plants: PlantConfig[];
 
+  private constructor() { // Make the constructor private if you're using a factory pattern
+    this.plants = []; // Initialize the array
+  }
+
   static create() {
     return new InternalDSL();
   }
