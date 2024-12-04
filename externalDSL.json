@@ -8,13 +8,15 @@
         "name": "Rain Storm",
         "description": "No sun, lots of water",
         "sunFrequency": 0,
-        "waterFrequency": 1
+        "waterFrequency": 1,
+        "scheduleTime": 10
       },
       {
         "name": "Drought",
         "description": "Lots of sun, no water",
         "sunFrequency": 1,
-        "waterFrequency": 0
+        "waterFrequency": 0,
+        "scheduleTime": 55
       }
     ]
   },
@@ -23,19 +25,22 @@
       "type": 1,
       "waterRequired": 5,
       "sunRequired": 3,
-      "neighborsRequired": 2
+      "neighborsRequired": 2,
+      "maxLevel": 3
     },
     {
       "type": 2,
       "waterRequired": 3,
       "sunRequired": 5,
-      "neighborsRequired": 1
+      "neighborsRequired": 1,
+      "maxLevel": 4
     },
     {
       "type": 3,
       "waterRequired": 4,
       "sunRequired": 4,
-      "neighborsRequired": 3
+      "neighborsRequired": 3,
+      "maxLevel": 2
     }
   ],
   "victoryConditions": {

@@ -1,10 +1,9 @@
-export interface PlantConfig {
-  num: number;
-  water: number;
-  sun: number;
-  neighbors: number;
-  level: number;
-}
+import { PlantConfig } from "./Settings";
+import { WeatherConfig } from "./Settings";
+import { VictoryConditions } from "./Settings";
+import Grid from "./Grid";
+import { Game } from "../scenes/Game";
+
 
 export class InternalDSL {
   private plants: PlantConfig[];
@@ -17,14 +16,13 @@ export class InternalDSL {
     return new InternalDSL();
   }
 
-  definePlantType(
-    num: number,
-    water: number,
-    sun: number,
-    neighbors: number,
-    level: number
-  ): this {
-    const config = { num, water, sun, neighbors, level };
+  defineWeatherConfig(grid: Grid, config: WeatherConfig) {
+    grid.chanceToGenWater = config.waterFrequency;
+    grid.chanceToGenSun = config.sunFrequency;
+    grid.events = config.events;
+  }
+
+  definePlantType(config: PlantConfig): this {
     this.plants.push(config);
     return this;
   }

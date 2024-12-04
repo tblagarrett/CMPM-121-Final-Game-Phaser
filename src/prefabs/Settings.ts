@@ -1,44 +1,49 @@
 import fs from "fs";
+import { InternalDSL } from "./InternalDSL";
 
-interface WeatherEvent {
+export interface WeatherEventConfig {
   name: string;
   description: string;
   sunFrequency: number;
   waterFrequency: number;
 }
 
-interface Weather {
+export interface WeatherConfig {
   random: boolean;
   waterFrequency: number;
   sunFrequency: number;
-  events: WeatherEvent[];
+  events: WeatherEventConfig[];
 }
 
-interface Plant {
+export interface PlantConfig {
   type: number;
   waterRequired: number;
   sunRequired: number;
   neighborsRequired: number;
+  maxLevel: number;
 }
 
-interface VictoryConditions {
+export interface VictoryConditions {
   typeSpecific: Record<string, number>;
   overallHarvest: number;
 }
 
 class Settings {
-  weather: Weather;
-  plants: Plant[];
+  weather: WeatherConfig;
+  plants: PlantConfig[];
   victoryConditions: VictoryConditions;
+  InternalDSL: InternalDSL;
 
   constructor(
-    weather: Weather,
-    plants: Plant[],
+    weather: WeatherConfig,
+    plants: PlantConfig[],
     victoryConditions: VictoryConditions
   ) {
     this.weather = weather;
     this.plants = plants;
     this.victoryConditions = victoryConditions;
+    this.InternalDSL = InternalDSL.create();
+    this.plants.forEach((plant) => this.InternalDSL.definePlantType(plant))
   }
 
   static fromJSON(json: string): Settings {
@@ -49,6 +54,6 @@ class Settings {
 
 // example on how to use:
 const json = fs.readFileSync("~/externalDSL.json", "utf8");
-const settings = Settings.fromJSON(json);
+export const settings = Settings.fromJSON(json);
 
 console.log(settings);

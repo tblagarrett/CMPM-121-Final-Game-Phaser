@@ -1,12 +1,17 @@
 import Phaser from "phaser";
 import { Cell } from "./Cell";
+import { settings } from "./Settings";
+import { InternalDSL } from "./InternalDSL";
+import { WeatherEventConfig } from "./Settings";
 
 export default class Grid extends Phaser.GameObjects.Container {
   public scene: Phaser.Scene;
   public width: number;
   public height: number;
   public cellSize: number;
-  private chanceToGen: number;
+  public chanceToGenSun: number;
+  public chanceToGenWater: number;
+  public events: WeatherEventConfig[]; 
   private cells: Cell[][];
 
   constructor(
@@ -22,7 +27,7 @@ export default class Grid extends Phaser.GameObjects.Container {
     this.width = width;
     this.height = height;
     this.cellSize = cellSize;
-    this.chanceToGen = 0.1;
+    settings.InternalDSL.defineWeatherConfig(this, settings.weather);
 
     this.cells = [];
 
@@ -51,10 +56,11 @@ export default class Grid extends Phaser.GameObjects.Container {
       for (let j = 0; j < this.height; j++) {
         let random = Math.random();
         let cell = this.cells[i][j];
-        if (random < this.chanceToGen) {
+        if (random < this.chanceToGenSun) {
           cell.addSun();
         }
-        cell.addWater(random < this.chanceToGen / 2);
+        random = Math.random();
+        cell.addWater(random < this.chanceToGenWater);
         if (cell.plant) {
           cell.plant.levelUp(this.countAdjacentPlants(i, j));
         }

@@ -19,7 +19,8 @@ export class Cell extends Phaser.GameObjects.Sprite {
     y: number,
     texture: string,
     frame: string | number | undefined,
-    cellSize: number
+    cellSize: number,
+    plantTypes: InternalDSL
   ) {
     super(scene, x, y, texture, frame);
 
@@ -27,11 +28,7 @@ export class Cell extends Phaser.GameObjects.Sprite {
     this.plant = null;
     this.waterStored = 0;
     this.maxWater = 6;
-
-    // Initialize plantTypes with an instance of InternalDSL
-    this.plantTypes = InternalDSL.create();
-    this.initializePlantTypes();
-
+    
     // Add the cell sprite
     this.sprite = scene.add.existing(this);
     this.sprite.setDepth(0);
@@ -56,14 +53,6 @@ export class Cell extends Phaser.GameObjects.Sprite {
       { fontSize: "16px", color: "#ffff0" } // Yellow text
     );
     this.plantText.setDepth(1);
-  }
-
-  // Initialize plant types
-  private initializePlantTypes(): void {
-    this.plantTypes
-      .definePlantType(1, 8, 5, 2, 3)
-      .definePlantType(2, 5, 3, 2, 4)
-      .definePlantType(3, 10, 8, 2, 2);
   }
 
   // Update visual indicators
