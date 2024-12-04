@@ -47,11 +47,88 @@
 
 ### External DSL for Scenario Design
 
-CHANGE THIS BEFORE SUBMITTING
+[F2.a]
 
-The devlog should explain the design of your external DSL for scenario design. Tell us which pre-existing data language (e.g. JSON/YAML/TOML) your DSL is based on. If it is not based on a pre-existing language, briefly explain your choice. Show us a short example of a scenario definition in this new language (even if it doesn't exactly match one used in your game's actual code). Next to the code example, give us a natural language translation of the meaning of that program so we can begin to learn how your language works.
+**Pre-existing data language: JSON**
+
+Our external DSL uses a human-readable format in JSON to allow designers to be able to easily adjust the conditions in the game, plant related settings and create unique gameplay scenarios.
+
+**Structure**
+
+The external DSL defines key components like weather, plant behavior, and victory conditions. The weather system includes randomized events (like "Rain Storm" or "Drought"), each with its own frequency and duration settings. The plant behavior section outlines their growth conditions. Lastly, the victory conditions specify how many plants of each type are required for success, as well as a general harvest target.
+
+**Example Scenario**
+
+```{
+  "weather": {
+    "random": true,
+    "waterFrequency": 0.5,
+    "sunFrequency": 0.5,
+    "events": [
+      {
+        "name": "Rain Storm",
+        "description": "No sun, lots of water",
+        "sunFrequency": 0,
+        "waterFrequency": 1,
+        "scheduleTime": 10,
+        "duration": 4
+      },
+      {
+        "name": "Drought",
+        "description": "Lots of sun, no water",
+        "sunFrequency": 1,
+        "waterFrequency": 0,
+        "scheduleTime": 55,
+        "duration": 8
+      }
+    ]
+  },
+  "plants": [
+    {
+      "type": 1,
+      "waterRequired": 5,
+      "sunRequired": 3,
+      "neighborsRequired": 2,
+      "maxLevel": 3
+    },
+    {
+      "type": 2,
+      "waterRequired": 3,
+      "sunRequired": 5,
+      "neighborsRequired": 1,
+      "maxLevel": 4
+    },
+    {
+      "type": 3,
+      "waterRequired": 4,
+      "sunRequired": 4,
+      "neighborsRequired": 3,
+      "maxLevel": 2
+    }
+  ],
+  "victoryConditions": {
+    "typeSpecific": {
+      "type1": 10,
+      "type2": 5,
+      "type3": 5
+    },
+    "overallHarvest": 20
+  }
+}
+```
+
+**In Natural Language**
+
+- **Weather:** The game features a randomized weather system. Initially, both water and sun are generated at a 50% chance. There are two scheduled weather events: a "Rain Storm" occurring at time 10 (lasting 4 time steps), which provides water but no sun, and a "Drought" starting at time 55 (lasting 8 time steps), which provides sun but no water.
+- **Plants:** There are three types of plants, each with its unique requirements:
+  - Type 1 needs 5 water, 3 sun, and 2 neighbors to grow. It can grow up to level 3.
+  - Type 2 requires 3 water, 5 sun, and 1 neighbor, with a maximum growth level of 4.
+  - Type 3 needs 4 water, 4 sun, and 3 neighbors to reach a max level of 2.
+- **Victory Conditions:** The player wins if they harvest at least 10 plants of Type 1, 5 plants of Type 2, and 5 plants of Type 3, or achieve a total of 20 harvested plants.
 
 ### Internal DSL for Plants and Growth Conditions
+
+[F2.b]
 
 **Host Language: TypeScript**
 
@@ -117,6 +194,8 @@ the `getRandPlantType()` selects a `PlantConfig` object from the DSL's internal 
 Overall, our internal DSL allowed us to make a plant system that could be easily modified while making plants that all had different growth conditions
 
 ### Switch to Alternate Platform
+
+[F2.c]
 
 **Javascript to Typescript**
 
