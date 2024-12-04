@@ -25,10 +25,10 @@
   - Same as last week.
 - [F0.e]
   - Each plant on the grid has a distinct type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
-  - Same as last week.
+  - When we originally implemented this mechanic, plants were randomly assigned a type, and their growth was based on a fixed quantity of sun and water. We now define distinct plant types with configurable growth conditions, allowing each plant type to have its own unique requirements for sun, water, and neighboring plants. This adds flexibility to that plant system.
 - [F0.f]
   - Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
-  - Same as last week. (WILL CHANGE THIS WEEK)
+  - The growth logic is now more flexible due to the Internal and External DSLs, allowing for customized conditions per plant species.
 - [F0.g]
   - A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
   - Same as last week.
@@ -82,32 +82,37 @@ This ensures that each plant has structurally unique conditions, such as in this
 
 **Advantages of the Internal DSL**
 
-The largest advantage of the internal DSL is being able to use the features of Typescript to simplify development in ways that would be difficult for an external DSL.
-
-For Example, our `sow()` function:
+Our project leverages an internal DSL (Domain-Specific Language) to define and manage plant types, weather configurations, and victory conditions dynamically. Below is an example of how our internal DSL integrates into the broader game logic:
 
 ```
-sow(): void {
-  const type = this.plantTypes.getRandPlantType(); // Randomly select a plant type
+// Internal DSL definition and usage
+const settings = Settings.fromJSON(json); // Load configurations from JSON
+
+// Plant definitions are dynamically added to the Internal DSL during initialization
+settings.plants.forEach((plant) =>
+  settings.InternalDSL.definePlantType(plant)
+);
+
+// Retrieve a plant type for spawning in a game cell
+const randomPlantType = settings.InternalDSL.getRandPlantType();
+```
+
+the `getRandPlantType()` selects a `PlantConfig` object from the DSL's internal storage and passes it directly to the Plant constructor, which uses multiple TypeScript-specific features:
+
+- **Dynamic and Type-Safe Object Creation:**
+  The `getRandPlantType()` method selects a `PlantConfig` directly from the DSL's internal storage. This object is used immediately to create a plant in the `sow()` function, ensuring the plant is correctly instantiated:
+  ```
+  sow(): void {
+  const type = this.plantTypes.getRandPlantType(); // Select a random plant type
   this.plant = new Plant(
     this.scene,
     this.y + this.cellSize / 2,
     this.x + this.cellSize / 2,
     type
   );
-
   this.updateIndicators();
-}
-```
-
-the `getRandPlantType()` selects a `PlantConfig` object from the DSL's internal storage and passes it directly to the Plant constructor, which uses multiple TypeScript-specific features:
-
-- **Dynamic Object Creation:**
-  The `PlantConfig` returned by `getRandPlantType()` can immediately be used to instantiate a Plant without any additional parsing or transformation.
-- **Type Safety:**
-  Since the internal DSL is written in TypeScript, the PlantConfig type ensures that all required fields (e.g., water, sun, level) are present and correctly typed, catching errors at compile time.
-- **Seamless Runtime Integration:**
-  Functions like `sow()` combine the internal DSL's configuration data logic like determining where the plant is placed and updating visual indicators. Achieving this level of integration with an external DSL would require a lot of extra work to execute.
+  }
+  ```
 
 Overall, our internal DSL allowed us to make a plant system that could be easily modified while making plants that all had different growth conditions
 
