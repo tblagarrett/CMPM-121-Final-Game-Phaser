@@ -15,26 +15,26 @@ export class Plant extends Phaser.GameObjects.Sprite {
     scene: Phaser.Scene,
     x: number,
     y: number,
-    type: PlantConfig
+    plant: PlantConfig
     //level: number
   ) {
     let texture: string;
-    const spriteName = `plant${type.num}-level${type.level}`;
-    if (type.num === 1 || type.num === 2 || type.num === 3) {
+    const spriteName = `plant${plant.type}-level${plant.maxLevel}`;
+    if (plant.type === 1 || plant.type === 2 || plant.type === 3) {
       texture = spriteName;
     } else {
       throw new Error("Invalid plant type");
     }
     super(scene, x, y, texture);
 
-    this.plant_type = type.num;
+    this.plant_type = plant.type;
     this.waterStored = 0;
     this.sunStored = 0;
-    this.level = type.level;
-    this.plantReq = type.neighbors;
-    this.maxLevel = type.level;
-    this.maxSun = type.sun;
-    this.maxWater = type.water;
+    this.level = plant.maxLevel;
+    this.plantReq = plant.neighborsRequired;
+    this.maxLevel = plant.maxLevel;
+    this.maxSun = plant.sunRequired;
+    this.maxWater = plant.waterRequired;
 
     /*if (this.plant_type === 1) {
       this.maxLevel = 3;

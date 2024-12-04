@@ -9,14 +9,16 @@
         "description": "No sun, lots of water",
         "sunFrequency": 0,
         "waterFrequency": 1,
-        "scheduleTime": 10
+        "scheduleTime": 10,
+        "duration": 4
       },
       {
         "name": "Drought",
         "description": "Lots of sun, no water",
         "sunFrequency": 1,
         "waterFrequency": 0,
-        "scheduleTime": 55
+        "scheduleTime": 55,
+        "duration": 8
       }
     ]
   },

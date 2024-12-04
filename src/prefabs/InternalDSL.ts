@@ -1,31 +1,73 @@
-import { PlantConfig } from "./Settings";
-import { WeatherConfig } from "./Settings";
-import { VictoryConditions } from "./Settings";
+import fs from "fs";
 import Grid from "./Grid";
-import { Game } from "../scenes/Game";
 
+export interface WeatherEventConfig {
+    name: string;
+    description: string;
+    sunFrequency: number;
+    waterFrequency: number;
+    scheduleTime: number;
+    duration: number;
+}
+
+export interface WeatherConfig {
+    random: boolean;
+    waterFrequency: number;
+    sunFrequency: number;
+    events: WeatherEventConfig[];
+}
+
+export interface PlantConfig {
+    type: number;
+    waterRequired: number;
+    sunRequired: number;
+    neighborsRequired: number;
+    maxLevel: number;
+}
+
+export interface VictoryConditions {
+    typeSpecific: Record<string, number>;
+    overallHarvest: number;
+}
 
 export class InternalDSL {
-  private plants: PlantConfig[];
+  weather: WeatherConfig;
+  plants: PlantConfig[];
+  victoryConditions: VictoryConditions;
 
-  private constructor() { // Make the constructor private if you're using a factory pattern
-    this.plants = []; // Initialize the array
+  constructor(
+    weather: WeatherConfig,
+    plants: PlantConfig[],
+    victoryConditions: VictoryConditions
+  ) {
+    this.weather = weather;
+    this.plants = plants;
+    this.victoryConditions = victoryConditions;
   }
 
-  static create() {
-    return new InternalDSL();
+  static fromJSON(json: string): InternalDSL {
+    const data = JSON.parse(json);
+    return new InternalDSL(data.weather, data.plants, data.victoryConditions);
   }
 
-  defineWeatherConfig(grid: Grid, config: WeatherConfig) {
+  defineWeather(grid: Grid) {
+    grid.chanceToGenWater = this.weather.waterFrequency;
+    grid.chanceToGenSun = this.weather.sunFrequency;
+
+    if (grid.events == null) {
+        grid.events = this.weather.events;
+    }
+  }
+
+  defineWeatherEvent(grid: Grid, config: WeatherEventConfig) {
     grid.chanceToGenWater = config.waterFrequency;
     grid.chanceToGenSun = config.sunFrequency;
-    grid.events = config.events;
   }
 
-  definePlantType(config: PlantConfig): this {
+  /*definePlantType(config: PlantConfig): this {
     this.plants.push(config);
     return this;
-  }
+  }*/
 
   getPlantType(type: number) {
     return this.plants[type];
@@ -43,3 +85,9 @@ export class InternalDSL {
 function getRandomInt(max: number): number {
   return Math.floor(Math.random() * max);
 }
+
+// Set up internal DSL
+const json = fs.readFileSync("~/externalDSL.json", "utf8");
+export const settings = InternalDSL.fromJSON(json);
+
+console.log(settings);

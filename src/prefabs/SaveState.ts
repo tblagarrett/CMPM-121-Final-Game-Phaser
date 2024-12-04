@@ -113,11 +113,11 @@ export class SaveState {
             x * grid.cellSize + grid.cellSize / 2,
             y * grid.cellSize + grid.cellSize / 2,
             {
-              num: plantType,
-              level: plantLevel,
-              neighbors: 0,
-              sun: 0,
-              water: 0,
+              type: plantType,
+              maxLevel: plantLevel,
+              neighborsRequired: 0,
+              sunRequired: 0,
+              waterRequired: 0,
             } // Adjust as needed
           );
           plant.waterStored = plantWaterStored;

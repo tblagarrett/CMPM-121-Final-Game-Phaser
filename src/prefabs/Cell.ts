@@ -28,6 +28,7 @@ export class Cell extends Phaser.GameObjects.Sprite {
     this.plant = null;
     this.waterStored = 0;
     this.maxWater = 6;
+    this.plantTypes = plantTypes;
     
     // Add the cell sprite
     this.sprite = scene.add.existing(this);

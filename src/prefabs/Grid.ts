@@ -1,8 +1,7 @@
 import Phaser from "phaser";
 import { Cell } from "./Cell";
-import { settings } from "./Settings";
-import { InternalDSL } from "./InternalDSL";
-import { WeatherEventConfig } from "./Settings";
+import { settings } from "./InternalDSL";
+import { WeatherEventConfig } from "./InternalDSL";
 
 export default class Grid extends Phaser.GameObjects.Container {
   public scene: Phaser.Scene;
@@ -13,6 +12,7 @@ export default class Grid extends Phaser.GameObjects.Container {
   public chanceToGenWater: number;
   public events: WeatherEventConfig[]; 
   private cells: Cell[][];
+  private time: number;
 
   constructor(
     scene: Phaser.Scene,
@@ -27,7 +27,7 @@ export default class Grid extends Phaser.GameObjects.Container {
     this.width = width;
     this.height = height;
     this.cellSize = cellSize;
-    settings.InternalDSL.defineWeatherConfig(this, settings.weather);
+    settings.defineWeather(this);
 
     this.cells = [];
 
@@ -41,7 +41,8 @@ export default class Grid extends Phaser.GameObjects.Container {
           j * cellSize,
           "blank-cell",
           undefined,
-          cellSize
+          cellSize,
+          settings
         );
         row.push(newCell);
         this.add(newCell);
@@ -52,6 +53,14 @@ export default class Grid extends Phaser.GameObjects.Container {
   }
 
   timeStep(): void {
+    this.time++;
+    this.events.forEach((event) => {
+      if(event.scheduleTime == this.time) {
+        settings.defineWeatherEvent(this, event);
+      } else if((event.scheduleTime + event.duration) == this.time) {
+        settings.defineWeather(this);
+      }
+    })
     for (let i = 0; i < this.width; i++) {
       for (let j = 0; j < this.height; j++) {
         let random = Math.random();
