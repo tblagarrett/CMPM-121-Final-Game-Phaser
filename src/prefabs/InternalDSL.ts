@@ -64,11 +64,6 @@ export class InternalDSL {
     grid.chanceToGenSun = config.sunFrequency;
   }
 
-  /*definePlantType(config: PlantConfig): this {
-    this.plants.push(config);
-    return this;
-  }*/
-
   getPlantType(type: number) {
     return this.plants[type];
   }

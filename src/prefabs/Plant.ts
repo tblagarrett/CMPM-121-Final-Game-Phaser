@@ -36,22 +36,6 @@ export class Plant extends Phaser.GameObjects.Sprite {
     this.maxSun = plant.sunRequired;
     this.maxWater = plant.waterRequired;
 
-    /*if (this.plant_type === 1) {
-      this.maxLevel = 3;
-      this.maxSun = 5;
-      this.maxWater = 8;
-    } else if (this.plant_type === 2) {
-      this.maxLevel = 4;
-      this.maxSun = 3;
-      this.maxWater = 5;
-    } else if (this.plant_type === 3) {
-      this.maxLevel = 2;
-      this.maxSun = 8;
-      this.maxWater = 10;
-    } else {
-      throw new Error("Invalid plant type"); // Defensive check for unsupported types
-    }*/
-
     this.scene.add.existing(this);
     this.setDisplaySize(80, 80);
   }
