@@ -1,4 +1,4 @@
-import fs from "fs";
+import externalDSL from '../../externalDSL.json' with {type: "json"};
 import Grid from "./Grid";
 
 export interface WeatherEventConfig {
@@ -87,7 +87,7 @@ function getRandomInt(max: number): number {
 }
 
 // Set up internal DSL
-const json = fs.readFileSync("~/externalDSL.json", "utf8");
-export const settings = InternalDSL.fromJSON(json);
+export const settings = InternalDSL.fromJSON(JSON.stringify(externalDSL));
+console.log(settings)
 
 console.log(settings);
