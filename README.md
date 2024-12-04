@@ -25,10 +25,10 @@
   - Same as last week.
 - [F0.e]
   - Each plant on the grid has a distinct type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
-  - Same as last week.
+  - When we originally implemented this mechanic, plants were randomly assigned a type, and their growth was based on a fixed quantity of sun and water. We now define distinct plant types with configurable growth conditions, allowing each plant type to have its own unique requirements for sun, water, and neighboring plants. This adds flexibility to that plant system.
 - [F0.f]
   - Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
-  - Same as last week. (WILL CHANGE THIS WEEK)
+  - The growth logic is now more flexible due to the Internal and External DSLs, allowing for customized conditions per plant species.
 - [F0.g]
   - A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
   - Same as last week.
@@ -53,23 +53,84 @@ The devlog should explain the design of your external DSL for scenario design. T
 
 ### Internal DSL for Plants and Growth Conditions
 
-CHANGE THIS BEFORE SUBMITTING
+**Host Language: TypeScript**
 
-Using one or more short code examples (possibly with irrelevant or repetitive blocks removed with "/_ ... _/" comments), show us what it like to use your DSL. Comment on which host language is being used (because the person reading your devlog might not have read the rest of your project's code to guess which language you are using). After the code example, explain the meaning of your code snippets in natural language to help us understand the meaning.
+Following is a code example showing how one could use our internalDSL in a Phaser-based game:
 
-Make sure to highlight how your internal DSL allows using host language features that would be difficult to offer in an external DSL.
+```// Internal DSL definition and usage
+const plantDSL = InternalDSL.create();
+
+// Define three plant types with distinct growth conditions
+plantDSL
+  .definePlantType(1, 8, 5, 2, 3) // Requires 8 water, 5 sunlight, 2 neighbors, max level 3
+  .definePlantType(2, 5, 3, 2, 4) // Requires 5 water, 3 sunlight, 2 neighbors, max level 4
+  .definePlantType(3, 10, 8, 2, 2); // Requires 10 water, 8 sunlight, 2 neighbors, max level 2
+
+// Retrieve a plant type for spawning in a game cell
+const randomPlantType = plantDSL.getRandPlantType();
+```
+
+**Explanation:**
+
+In this, we are able to create three different types of plants that each have their own growth conditions. Afterwards, we can call the DSL to get a random plant type when we want to make any plant in the future.
+
+This ensures that each plant has structurally unique conditions, such as in this example where:
+
+- Plant 1 is focused on moderate water and sunlight.
+- Plant 2 prioritizes balance but has a higher growth level.
+- Plant 3 thrives in abundant resources but has a lower max level.
+
+**Advantages of the Internal DSL**
+
+Our project leverages an internal DSL (Domain-Specific Language) to define and manage plant types, weather configurations, and victory conditions dynamically. Below is an example of how our internal DSL integrates into the broader game logic:
+
+```
+// Internal DSL definition and usage
+const settings = Settings.fromJSON(json); // Load configurations from JSON
+
+// Plant definitions are dynamically added to the Internal DSL during initialization
+settings.plants.forEach((plant) =>
+  settings.InternalDSL.definePlantType(plant)
+);
+
+// Retrieve a plant type for spawning in a game cell
+const randomPlantType = settings.InternalDSL.getRandPlantType();
+```
+
+the `getRandPlantType()` selects a `PlantConfig` object from the DSL's internal storage and passes it directly to the Plant constructor, which uses multiple TypeScript-specific features:
+
+- **Dynamic and Type-Safe Object Creation:**
+  The `getRandPlantType()` method selects a `PlantConfig` directly from the DSL's internal storage. This object is used immediately to create a plant in the `sow()` function, ensuring the plant is correctly instantiated:
+  ```
+  sow(): void {
+  const type = this.plantTypes.getRandPlantType(); // Select a random plant type
+  this.plant = new Plant(
+    this.scene,
+    this.y + this.cellSize / 2,
+    this.x + this.cellSize / 2,
+    type
+  );
+  this.updateIndicators();
+  }
+  ```
+
+Overall, our internal DSL allowed us to make a plant system that could be easily modified while making plants that all had different growth conditions
 
 ### Switch to Alternate Platform
 
-The switch that we decided to do was from Javascript to Typescript. We made that switch for a few reasons:
+**Javascript to Typescript**
+
+We made the switch from Javascript to Typescript for a few reasons:
 
 - It allowed us to ensure type safety, reducing the runtime errors.
 - Gave us the chance to catch bugs at compile time instead of runtime
 - Made code easier to write with better code completion
 
+**How It Was Done**
+
 What we carried over was the existing JavaScript logic, structures, and algorithms; as well as the Phaser 3 API as it supports both Javascript and Typescript.
 
-When we did created the original project, it was done using a Webpack Javascript template made by the Phaser team. They also had a Typescript template, which made the swapping process simpler, as we could update the preexisting files and then change the Javascript ones to Typescript.
+When we created the original project, it was done using a Webpack Javascript template made by the Phaser team. They also had a Typescript template, which made the swapping process simpler, as we could update the preexisting files and then change the Javascript ones to Typescript.
 
 That did not come without any problems, as we ran into a few. There were problems related to handling dynamic imports, identifying and correcting areas where implicit any types were used, and updating the development workflow to include TypeScript compilation.
 
