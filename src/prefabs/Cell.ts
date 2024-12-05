@@ -29,7 +29,7 @@ export class Cell extends Phaser.GameObjects.Sprite {
     this.waterStored = 0;
     this.maxWater = 6;
     this.plantTypes = plantTypes;
-    
+
     // Add the cell sprite
     this.sprite = scene.add.existing(this);
     this.sprite.setDepth(0);
@@ -71,7 +71,8 @@ export class Cell extends Phaser.GameObjects.Sprite {
       this.scene,
       this.y + this.cellSize / 2,
       this.x + this.cellSize / 2,
-      type
+      type,
+      1
     );
 
     this.updateIndicators();

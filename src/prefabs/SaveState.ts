@@ -1,4 +1,4 @@
-import { Plant } from "./Plant";
+import { Plant, PlantMemento } from "./Plant";
 import { Cell } from "./Cell";
 import Grid from "./Grid";
 import { Position } from "./Player";
@@ -7,7 +7,7 @@ export class SaveState {
   private gridWidth: number;
   private gridHeight: number;
   private BYTES_PER_CELL: number;
-  private BYTES_PER_ACTION: number;
+  private BYTES_PER_POSITION: number;
   private gridSize: number;
   public buffer: ArrayBuffer | null;
   public dataView: DataView | null;
@@ -16,7 +16,7 @@ export class SaveState {
     this.gridWidth = gridWidth;
     this.gridHeight = gridHeight;
     this.BYTES_PER_CELL = 5 * Int32Array.BYTES_PER_ELEMENT; // 1 cell + 4 plant attributes
-    this.BYTES_PER_ACTION = 2 * Int32Array.BYTES_PER_ELEMENT; // 2 integers per action (x, y)
+    this.BYTES_PER_POSITION = 2 * Int32Array.BYTES_PER_ELEMENT; // 2 integers per action (x, y)
     this.gridSize = gridWidth * gridHeight * this.BYTES_PER_CELL;
     this.buffer = null;
     this.dataView = null;
@@ -24,7 +24,7 @@ export class SaveState {
 
   // Serialize grid data and player actions into the buffer
   save(grid: Grid, position: Position): ArrayBuffer {
-    const totalSize = this.gridSize + this.BYTES_PER_ACTION; // Only one action (i, j)
+    const totalSize = this.gridSize + this.BYTES_PER_POSITION; // Only one action (i, j)
     this.buffer = new ArrayBuffer(totalSize);
     this.dataView = new DataView(this.buffer);
 
@@ -44,7 +44,10 @@ export class SaveState {
           this.dataView.setInt32(offset, cell.plant.level);
           offset += Int32Array.BYTES_PER_ELEMENT;
 
-          this.dataView.setInt32(offset, cell.plant.plant_type);
+          this.dataView.setInt32(
+            offset,
+            PlantMemento.encode(cell.plant.config)
+          );
           offset += Int32Array.BYTES_PER_ELEMENT;
 
           this.dataView.setInt32(offset, cell.plant.waterStored);
@@ -93,7 +96,7 @@ export class SaveState {
         const plantLevel = this.dataView.getInt32(offset);
         offset += Int32Array.BYTES_PER_ELEMENT;
 
-        const plantType = this.dataView.getInt32(offset);
+        const plantType = PlantMemento.decode(this.dataView.getInt32(offset));
         offset += Int32Array.BYTES_PER_ELEMENT;
 
         const plantWaterStored = this.dataView.getInt32(offset);
@@ -112,13 +115,8 @@ export class SaveState {
             grid.scene,
             x * grid.cellSize + grid.cellSize / 2,
             y * grid.cellSize + grid.cellSize / 2,
-            {
-              type: plantType,
-              maxLevel: plantLevel,
-              neighborsRequired: 0,
-              sunRequired: 0,
-              waterRequired: 0,
-            } // Adjust as needed
+            plantType,
+            plantLevel
           );
           plant.waterStored = plantWaterStored;
           plant.sunStored = plantSunStored;
