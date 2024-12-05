@@ -5,6 +5,28 @@
 3. Push the changes
 4. Check github actions and pages
 
+# General Game Info:
+
+- This is a 2D top-down gardening simulator with a simple control scheme reliant entirely on keypresses.
+- The garden is organized in a 10 x 10 grid that the player can navigate through in individual steps.
+- Each step also moves time forward by one time step which triggers environmental changes.
+- Each cell receives a random amount of sun and water each time step but only stores the water.
+- The player can sow a plant in each cell which will randomly be 1 of 3 available types of plants and the plants themselves store sunlight and water provided by the cell it inhabits each turn.
+- Plants have 3 different available types that have different requirements for each to reach the next growth stage.
+  - The maximum number of growth stages differ between plants and each plant has different sun and water requirements to progress to each stage.
+  - All plants require at least 2 neighboring plants to be able to progress to the next possible stage.
+- Upon reaching the maximum possible growth stage, the player can reap/harvest the plant when standing in the corresponding cell.
+- The game reaches completion when the player can successfully reap 10 plants.
+
+## Programming Practices:
+
+- Tools used:
+  - Github Actions
+  - Prettier
+  - Phaser (JavaScript Compatible Template)
+  - Phaser (TypeScript Compatible Template)
+  - Webpack to allow dev updates without changing the build
+
 # Devlog Entry - 12/2/2024
 
 ## How we satisfied the software requirements
@@ -31,7 +53,7 @@
   - The growth logic is now more flexible due to the Internal and External DSLs, allowing for customized conditions per plant species.
 - [F0.g]
   - A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
-  - Same as last week.
+  - The victory conditions are now changeable using the External DSL. This allows devs to set specific game scenarios and change the win conditions easily.
 - [F1.a]
   - The important state of your game's grid must be backed by a single contiguous byte array in AoS or SoA format. If your game stores the grid state in multiple format, the byte array format must be the primary format (i.e. other formats are decoded from it as needed).
   - Same as last week.
@@ -217,9 +239,15 @@ In general, we did not have to change much about the previous concepts because o
 
 ## Reflection
 
-CHANGE THIS BEFORE SUBMITTING
+### How the Switch Went
 
-Looking back on how you achieved the new F2 requirements, how has your team’s plan changed? Did you reconsider any of the choices you previously described for Tools and Materials or your Roles? Has your game design evolved now that you've started to think about giving the player more feedback? It would be very suspicious if you didn’t need to change anything. There’s learning value in you documenting how your team’s thinking has changed over time.
+The switch went as smooth as we could have expected because of the preparation made at the beginning of the project. This is outlined in the section above, but in general we used a Phaser template that had equivalents in both Javascript and Typescript which allowed a near seamless swap.
+
+### How the DSLs went
+
+The DSLs required the most refactoring of our project. This caused us to change a lot of the F0 requirements to accommodate for both DSLs. We also got the chance to incorportate new patterns that we haven't worked with previously. We used json files, and added in a new weather system.
+
+All in all, this step of the process was difficult, and due to the Thanksgiving break we were unable to meet the deadline; however, the changes we have made now are well implemented and impactful. We are hoping for the best going into the next and final step.
 
 # Devlog Entry - 11/27/2024
 
