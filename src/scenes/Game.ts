@@ -134,7 +134,7 @@ export class Game extends Phaser.Scene {
   checkForComplete(): void {
     if (this.plantsReaped >= this.ENDGOAL) {
       this.scene.pause("Game");
-      this.scene.launch("End", { time_steps: 0 });
+      this.scene.launch("End", { time_steps: this.time_steps });
     }
   }
 
