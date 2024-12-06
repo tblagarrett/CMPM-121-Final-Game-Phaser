@@ -2,6 +2,7 @@ import Grid from "../prefabs/Grid";
 import { Player } from "../prefabs/Player";
 import { SaveSession } from "../prefabs/SaveState";
 import StateManager from "../prefabs/StateManager";
+import { InputManager } from "../prefabs/InputManager";
 
 // Define the types for the grid, player, and other properties
 export class Game extends Phaser.Scene {
@@ -60,63 +61,50 @@ export class Game extends Phaser.Scene {
     this.StateManager = new StateManager(this.gridSizeX, this.gridSizeY);
     this.loadGameState();
 
-    // sow/reap input
-    this.input.keyboard?.on("keydown-SPACE", () => {
+    // Input manager bindings
+    const inputManager = new InputManager(this);
+
+    // Bind sow/reap
+    inputManager.bindKey("SPACE", () => {
       this.sowOrReap(this.player.position.i, this.player.position.j);
       this.checkForComplete();
     });
 
-    // Save/Load inputs
-    this.input.keyboard?.on("keydown-S", () => {
-      this.saveGameState();
-    });
-
-    this.input.keyboard?.on("keydown-L", () => {
-      this.loadGameState();
-    });
-
-    this.input.keyboard?.on("keydown-U", () => {
+    // Bind save/load/undo/redo
+    inputManager.bindKey("S", () => this.saveGameState());
+    inputManager.bindKey("L", () => this.loadGameState());
+    inputManager.bindKey("U", () => {
       const session = this.StateManager.undo(this.grid);
       if (session) {
-        this.player.reset(session.position);
-        this.updateGridVisuals();
-        console.log("Undo performed!");
+        this.updateGameState(session);
       }
     });
 
-    this.input.keyboard?.on("keydown-R", () => {
+    inputManager.bindKey("R", () => {
       const session = this.StateManager.redo(this.grid);
       if (session) {
-        this.player.reset(session.position);
-        this.updateGridVisuals();
-        console.log("Redo performed!");
+        this.updateGameState(session);
       }
     });
 
-    // Save slot selection inputs
-    this.input.keyboard?.on("keydown-ONE", () => {
-      this.saveSlot = "save1";
-      this.loadGameState();
-      console.log("Selected save slot 1");
+    // Bind save slot selection
+    ["ONE", "TWO", "THREE"].forEach((key, index) => {
+      inputManager.bindKey(key, () => {
+        this.selectSaveSlot(index + 1);
+      });
     });
 
-    this.input.keyboard?.on("keydown-TWO", () => {
-      this.saveSlot = "save2";
-      this.loadGameState();
-      console.log("Selected save slot 2");
-    });
-
-    this.input.keyboard?.on("keydown-THREE", () => {
-      this.saveSlot = "save3";
-      this.loadGameState();
-      console.log("Selected save slot 3");
-    });
-
-    // resets the game
-    this.input.keyboard?.on("keydown-C", () => {
+    // Reset game
+    inputManager.bindKey("C", () => {
       localStorage.clear();
       location.reload();
     });
+  }
+
+  selectSaveSlot(slotNumber: number): void {
+    this.saveSlot = `save${slotNumber}`;
+    this.loadGameState();
+    console.log(`Selected save slot ${slotNumber}`);
   }
 
   timeStep(): void {
@@ -158,15 +146,18 @@ export class Game extends Phaser.Scene {
   loadGameState(): void {
     const session = this.StateManager.loadGameState(this.grid, this.saveSlot);
     if (!session) return;
+    this.updateGameState(session);
+    console.log("Game state loaded!");
+  }
 
+  // Updates game constants and grid
+  updateGameState(session: SaveSession) {
     // Update player state
     this.player.reset(session.position);
-
     // Update time state
     this.time_steps = session.time;
-
-    this.updateGridVisuals(); // Update visuals
-    console.log("Game state loaded!");
+    console.log("time:", this.time_steps);
+    this.updateGridVisuals();
   }
 
   // Force update the grid visuals after loading the game state
