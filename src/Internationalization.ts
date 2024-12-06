@@ -14,6 +14,7 @@ export function updateTranslations() {
 // Language switcher buttons example
 export function addLanguageSwitcher() {
   const langButtons = document.createElement("div");
+  langButtons.id = "translation-buttons";
   langButtons.innerHTML = `
     <button id="en">English</button>
     <button id="zh">中文</button>

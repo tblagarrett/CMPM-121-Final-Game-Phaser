@@ -8,7 +8,10 @@ import { Preloader } from "./scenes/Preloader";
 
 import { Types } from "phaser";
 
-import { updateTranslations, addLanguageSwitcher } from "./translation";
+import {
+  updateTranslations,
+  addLanguageSwitcher,
+} from "./Internationalization";
 import i18next from "i18next";
 import HttpBackend from "i18next-http-backend";
 

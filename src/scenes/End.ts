@@ -1,6 +1,6 @@
 import { Scene } from "phaser";
 import { width, height } from "../main";
-import i18next from "../translation";
+import i18next from "../Internationalization";
 
 interface EndSceneData {
   time_steps: number;
