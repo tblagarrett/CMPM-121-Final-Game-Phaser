@@ -18,6 +18,7 @@ export function addLanguageSwitcher() {
   langButtons.innerHTML = `
     <button id="en">English</button>
     <button id="zh">中文</button>
+    <button id="ar">العربية</button>
   `;
   document.body.insertBefore(langButtons, document.body.firstChild);
 
@@ -27,6 +28,10 @@ export function addLanguageSwitcher() {
 
   document.getElementById("zh")?.addEventListener("click", () => {
     i18next.changeLanguage("zh", updateTranslations); // Change to Chinese
+  });
+
+  document.getElementById("ar")?.addEventListener("click", () => {
+    i18next.changeLanguage("ar", updateTranslations); // Change to Arabic
   });
 }
 
