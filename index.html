@@ -5,18 +5,25 @@
     <link rel="icon" type="image/png" href="./favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./style.css" />
-    <title>Phaser - Template</title>
+    <title data-i18n="title">Phaser - Template</title>
   </head>
-
   <body>
     <div id="app">
-      <h3>Save Instructions</h3>
-      <div>Press [1], [2], or [3] to navigate save files. </br>Press [S] to save your game into that slot. </br>Press [L] to load your game from that slot. </br>Press [U] to Undo and [R] to Redo.</div>
-      <h3>Game Instructions</h3>
-      <div>Use Arrow Keys to move player on grid. Every player step passes time.</br>Press [SPACEBAR] to sow or reap plants in each cell.</br>Plants need neighbors to grow.</div>
+      <h3 data-i18n="instructions.save">{instructions.save}</h3>
+      <div data-i18n="instructions.save-files">{instructions.save-files}</div>
+      <br />
+      <div data-i18n="instructions.save-slot">{instructions.save-slot}</div>
+      <br />
+      <div data-i18n="instructions.load-slot">{instructions.load-slot}</div>
+      <br />
+      <div data-i18n="instructions.undo-redo">{instructions.undo-redo}</div>
+      <h3 data-i18n="instructions.game">{instructions.game}</h3>
+      <div data-i18n="instructions.movement">{instructions.movement}</div>
+      <br />
+      <div data-i18n="instructions.reap">{instructions.reap}</div>
+      <br />
+      <div data-i18n="instructions.plants">{instructions.plants}</div>
       <div id="game-container"></div>
-      
     </div>
-    <!-- <script type="module" src="src/main.js"></script> -->
   </body>
 </html>

@@ -8,6 +8,35 @@ import { Preloader } from "./scenes/Preloader";
 
 import { Types } from "phaser";
 
+import { updateTranslations, addLanguageSwitcher } from "./translation";
+import i18next from "i18next";
+import HttpBackend from "i18next-http-backend";
+
+// Wait for i18next initialization before starting the game
+i18next
+  .use(HttpBackend)
+  .init({
+    lng: "en", // Default language
+    fallbackLng: "en", // Default fallback language if the key is missing
+    backend: {
+      // loadPath: "/locales/{{lng}}.json",
+      loadPath: (lng: any) => {
+        const path = `/locales/${lng}.json`;
+        console.log(`Loading translations from: ${path}`);
+        return path;
+      },
+    },
+    debug: true,
+  })
+  .then(() => {
+    // `updateTranslations` will only run once i18next has fully initialized
+    updateTranslations();
+    addLanguageSwitcher();
+  })
+  .catch((err) => {
+    console.error("Error during i18next initialization", err);
+  });
+
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config: Types.Core.GameConfig = {
