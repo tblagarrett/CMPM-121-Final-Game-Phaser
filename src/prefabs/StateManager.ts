@@ -1,22 +1,12 @@
-import { Position } from "./Player";
-import SaveState from "./SaveState";
+import { SaveSession, SaveState } from "./SaveState";
 
-class StateManager {
-  private bufferArray: ArrayBuffer[] = [];
-  private currentStateIndex: number = -1;
-  private saveState: SaveState;
-  private currentSlot: string = "save1"; // Track the current slot
-
-  constructor(gridWidth: number, gridHeight: number) {
-    this.saveState = new SaveState(gridWidth, gridHeight);
-  }
-
-  private arrayBufferToBase64(buffer: ArrayBuffer): string {
+// Used to convert binary into string for storing into localstorage
+class BufferManager {
+  static arrayBufferToBase64(buffer: ArrayBuffer): string {
     const binary = String.fromCharCode(...new Uint8Array(buffer));
     return btoa(binary);
   }
-
-  private base64ToArrayBuffer(base64: string): ArrayBuffer {
+  static base64ToArrayBuffer(base64: string): ArrayBuffer {
     const binary = atob(base64);
     const length = binary.length;
     const buffer = new ArrayBuffer(length);
@@ -26,10 +16,21 @@ class StateManager {
     }
     return buffer;
   }
+}
+
+export class StateManager {
+  private bufferArray: ArrayBuffer[] = [];
+  private currentStateIndex: number = -Infinity;
+  private saveState: SaveState;
+  private currentSlot: string = "save1"; // Track the current slot
+
+  constructor(gridWidth: number, gridHeight: number) {
+    this.saveState = new SaveState(gridWidth, gridHeight);
+  }
 
   saveToLocalStorage(slot: string = "save1"): void {
     const serializedBuffers = this.bufferArray.map((buf) =>
-      this.arrayBufferToBase64(buf)
+      BufferManager.arrayBufferToBase64(buf)
     );
     localStorage.setItem(slot, JSON.stringify(serializedBuffers));
   }
@@ -48,76 +49,74 @@ class StateManager {
       return;
     }
     this.bufferArray = serializedBuffers.map((base64: string) =>
-      this.base64ToArrayBuffer(base64)
+      BufferManager.base64ToArrayBuffer(base64)
     );
-    this.currentStateIndex = this.bufferArray.length - 1;
+    this.currentStateIndex = Math.max(this.bufferArray.length - 1, 0);
   }
 
   addBuffer(buffer: ArrayBuffer, slot: string = "save1"): void {
+    // resets redo/undo state if moving after undoing
     if (this.currentStateIndex < this.bufferArray.length - 1) {
-      this.bufferArray = this.bufferArray.slice(0, this.currentStateIndex + 1);
+      this.bufferArray = this.bufferArray.slice(0, this.currentStateIndex);
     }
     this.bufferArray.push(buffer);
-    this.currentStateIndex = this.bufferArray.length - 1;
+    this.currentStateIndex = this.bufferArray.length;
     this.saveToLocalStorage(slot);
   }
 
-  getLastBuffer(): ArrayBuffer | null {
+  getLastBuffer(): ArrayBuffer | undefined {
     if (this.bufferArray.length === 0) {
       console.log("No buffers available!");
-      return null;
+      return;
     }
     return this.bufferArray[this.currentStateIndex];
   }
 
-  saveGameState(grid: any, position: Position, slot: string = "save1"): void {
-    const buffer = this.saveState.save(grid, position);
+  saveGameState(saveSession: SaveSession, slot: string = "save1"): void {
+    const buffer = this.saveState.save(saveSession);
     this.addBuffer(buffer, slot);
   }
 
-  loadGameState(
-    grid: any,
-    slot: string = "save1"
-  ): { grid: any; position: Position } {
+  loadGameState(grid: any, slot: string = "save1"): SaveSession | undefined {
     this.loadFromLocalStorage(slot);
     const lastBuffer = this.getLastBuffer();
-    if (!lastBuffer) return { grid: null, position: { i: 0, j: 0 } };
+    if (!lastBuffer) return undefined;
 
     this.saveState.buffer = lastBuffer;
     this.saveState.dataView = new DataView(lastBuffer);
 
-    if (!grid) {
-      console.error("Grid is not initialized");
-      return { grid: null, position: { i: 0, j: 0 } };
-    }
-
     return this.saveState.load(grid);
   }
 
-  undo(grid: any): { grid: any; position: Position } {
-    if (this.currentStateIndex > 0) {
-      this.currentStateIndex--;
-      const buffer = this.getLastBuffer();
-      this.saveState.buffer = buffer!;
-      this.saveState.dataView = new DataView(buffer!);
-      return this.saveState.load(grid);
-    } else {
-      console.log("No more states to undo!");
-      return { grid: null, position: { i: 0, j: 0 } };
-    }
+  undo(grid: any): SaveSession | undefined {
+    return this.moveState(-1, grid); // Go back one state
   }
 
-  redo(grid: any): { grid: any; position: Position } {
-    if (this.currentStateIndex < this.bufferArray.length - 1) {
-      this.currentStateIndex++;
-      const buffer = this.getLastBuffer()!;
-      this.saveState.buffer = buffer;
-      this.saveState.dataView = new DataView(buffer);
-      return this.saveState.load(grid);
-    } else {
-      console.log("No more states to redo!");
-      return { grid: null, position: { i: 0, j: 0 } };
+  redo(grid: any): SaveSession | undefined {
+    return this.moveState(1, grid); // Go forward one state
+  }
+
+  private moveState(step: number, grid: any): SaveSession | undefined {
+    const newIndex = this.currentStateIndex + step;
+
+    // Handle out-of-bound scenarios
+    if (newIndex < 0 || newIndex >= this.bufferArray.length) {
+      console.log(
+        step > 0 ? "No more states to redo!" : "No more states to undo!"
+      );
+      return undefined;
     }
+
+    // Update currentStateIndex
+    this.currentStateIndex = newIndex;
+
+    // Load the new state
+    const buffer = this.getLastBuffer();
+    if (!buffer) return undefined;
+
+    this.saveState.buffer = buffer;
+    this.saveState.dataView = new DataView(buffer);
+    return this.saveState.load(grid);
   }
 }
 

@@ -1,5 +1,6 @@
 import Grid from "../prefabs/Grid";
 import { Player } from "../prefabs/Player";
+import { SaveSession } from "../prefabs/SaveState";
 import StateManager from "../prefabs/StateManager";
 
 // Define the types for the grid, player, and other properties
@@ -75,19 +76,18 @@ export class Game extends Phaser.Scene {
     });
 
     this.input.keyboard?.on("keydown-U", () => {
-      const { grid, position } = this.StateManager.undo(this.grid);
-      console.log(position);
-      if (grid) {
-        this.player.reset(position);
+      const session = this.StateManager.undo(this.grid);
+      if (session) {
+        this.player.reset(session.position);
         this.updateGridVisuals();
         console.log("Undo performed!");
       }
     });
 
     this.input.keyboard?.on("keydown-R", () => {
-      const { grid, position } = this.StateManager.redo(this.grid);
-      if (grid) {
-        this.player.reset(position);
+      const session = this.StateManager.redo(this.grid);
+      if (session) {
+        this.player.reset(session.position);
         this.updateGridVisuals();
         console.log("Redo performed!");
       }
@@ -111,12 +111,18 @@ export class Game extends Phaser.Scene {
       this.loadGameState();
       console.log("Selected save slot 3");
     });
+
+    // resets the game
+    this.input.keyboard?.on("keydown-C", () => {
+      localStorage.clear();
+      location.reload();
+    });
   }
 
   timeStep(): void {
-    this.saveGameState();
     this.grid.timeStep();
     this.time_steps++;
+    this.saveGameState();
   }
 
   sowOrReap(x: number, y: number): void {
@@ -140,23 +146,24 @@ export class Game extends Phaser.Scene {
 
   // Save the game state
   saveGameState(): void {
-    this.StateManager.saveGameState(
-      this.grid,
-      this.player.position,
-      this.saveSlot
-    );
+    const state: SaveSession = {
+      grid: this.grid,
+      position: this.player.position,
+      time: this.time_steps,
+    };
+    this.StateManager.saveGameState(state, this.saveSlot);
   }
 
   // Load the game state and immediately update the visuals
   loadGameState(): void {
-    const { grid, position } = this.StateManager.loadGameState(
-      this.grid,
-      this.saveSlot
-    );
-    if (!grid) return;
+    const session = this.StateManager.loadGameState(this.grid, this.saveSlot);
+    if (!session) return;
 
     // Update player state
-    this.player.reset(position);
+    this.player.reset(session.position);
+
+    // Update time state
+    this.time_steps = session.time;
 
     this.updateGridVisuals(); // Update visuals
     console.log("Game state loaded!");

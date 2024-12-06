@@ -3,11 +3,18 @@ import { Cell } from "./Cell";
 import Grid from "./Grid";
 import { Position } from "./Player";
 
+export interface SaveSession {
+  grid: Grid;
+  position: Position;
+  time: number;
+}
+
 export class SaveState {
   private gridWidth: number;
   private gridHeight: number;
   private BYTES_PER_CELL: number;
-  private BYTES_PER_POSITION: number;
+  private BYTES_POSITION: number;
+  private BYTES_TIME: number;
   private gridSize: number;
   public buffer: ArrayBuffer | null;
   public dataView: DataView | null;
@@ -16,15 +23,16 @@ export class SaveState {
     this.gridWidth = gridWidth;
     this.gridHeight = gridHeight;
     this.BYTES_PER_CELL = 5 * Int32Array.BYTES_PER_ELEMENT; // 1 cell + 4 plant attributes
-    this.BYTES_PER_POSITION = 2 * Int32Array.BYTES_PER_ELEMENT; // 2 integers per action (x, y)
+    this.BYTES_POSITION = 2 * Int32Array.BYTES_PER_ELEMENT; // 2 integers per position (x, y)
+    this.BYTES_TIME = Int32Array.BYTES_PER_ELEMENT; // 1 integer for time step
     this.gridSize = gridWidth * gridHeight * this.BYTES_PER_CELL;
     this.buffer = null;
     this.dataView = null;
   }
 
-  // Serialize grid data and player actions into the buffer
-  save(grid: Grid, position: Position): ArrayBuffer {
-    const totalSize = this.gridSize + this.BYTES_PER_POSITION; // Only one action (i, j)
+  // Serialize grid data and player positions into the buffer
+  save(saveSession: SaveSession): ArrayBuffer {
+    const totalSize = this.gridSize + this.BYTES_POSITION + this.BYTES_TIME; // {i, j} player position + time (steps)
     this.buffer = new ArrayBuffer(totalSize);
     this.dataView = new DataView(this.buffer);
 
@@ -33,7 +41,7 @@ export class SaveState {
     // Serialize grid data
     for (let y = 0; y < this.gridHeight; y++) {
       for (let x = 0; x < this.gridWidth; x++) {
-        const cell: Cell = grid.getCell(x, y);
+        const cell: Cell = saveSession.grid.getCell(x, y);
 
         // Write cell data
         this.dataView.setInt32(offset, cell.waterStored);
@@ -65,21 +73,23 @@ export class SaveState {
       }
     }
 
-    // Serialize the single action
-    this.dataView.setInt32(offset, position.i);
+    // Serialize the single position
+    this.dataView.setInt32(offset, saveSession.position.i);
     offset += Int32Array.BYTES_PER_ELEMENT;
-    this.dataView.setInt32(offset, position.j);
+    this.dataView.setInt32(offset, saveSession.position.j);
+    offset += Int32Array.BYTES_PER_ELEMENT;
+
+    // Serialize time
+    this.dataView.setInt32(offset, saveSession.time);
     offset += Int32Array.BYTES_PER_ELEMENT;
 
     return this.buffer;
   }
 
-  // Deserialize buffer data back into the grid and player actions
-  load(
-    grid: Grid
-  ): { grid: Grid; position: Position } | { grid: null; position: Position } {
-    if (!this.buffer || !this.dataView)
-      return { grid: null, position: { i: 0, j: 0 } };
+  // Deserialize buffer data back into the grid and player position
+  load(grid: Grid): SaveSession | undefined {
+    // if buffer doesn't exist return undefined
+    if (!this.buffer || !this.dataView) return;
 
     let offset = 0;
 
@@ -139,7 +149,11 @@ export class SaveState {
       j: this.dataView.getInt32(offset + Int32Array.BYTES_PER_ELEMENT),
     };
 
-    return { grid, position };
+    // Deserialize time
+    offset += this.BYTES_POSITION;
+    const time: number = this.dataView.getInt32(offset);
+
+    return { grid, position, time };
   }
 }
 
