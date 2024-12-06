@@ -5,6 +5,101 @@
 3. Push the changes
 4. Check github actions and pages
 
+# General Game Info:
+
+- This is a 2D top-down gardening simulator with a simple control scheme reliant entirely on keypresses.
+- The garden is organized in a 10 x 10 grid that the player can navigate through in individual steps.
+- Each step also moves time forward by one time step which triggers environmental changes.
+- Each cell receives a random amount of sun and water each time step but only stores the water.
+- The player can sow a plant in each cell which will randomly be 1 of 3 available types of plants and the plants themselves store sunlight and water provided by the cell it inhabits each turn.
+- Plants have 3 different available types that have different requirements for each to reach the next growth stage.
+  - The maximum number of growth stages differ between plants and each plant has different sun and water requirements to progress to each stage.
+  - All plants require at least 2 neighboring plants to be able to progress to the next possible stage.
+- Upon reaching the maximum possible growth stage, the player can reap/harvest the plant when standing in the corresponding cell.
+- The game reaches completion when the player can successfully reap 10 plants.
+
+## Programming Practices:
+
+- Tools used:
+  - Github Actions
+  - Prettier
+  - Phaser (JavaScript Compatible Template)
+  - Phaser (TypeScript Compatible Template)
+  - Webpack to allow dev updates without changing the build
+
+# Devlog Entry 12/6/2024
+
+## How we satisfied the software requirements
+
+### F0+F1+F2
+
+- [F0.a]
+  - You control a character moving over a 2D grid.
+  - Same as last week.
+- [F0.b]
+  - You advance time manually in the turn-based simulation.
+  - Same as last week.
+- [F0.c]
+  - You can reap or sow plants on grid cells only when you are near them.
+  - Same as last week.
+- [F0.d]
+  - Grid cells have sun and water levels. The incoming sun and water for each cell is somehow randomly generated each turn. Sun energy cannot be stored in a cell (it is used immediately or lost) while water moisture can be slowly accumulated over several turns.
+  - Same as last week.
+- [F0.e]
+  - Each plant on the grid has a distinct type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
+  - Same as last week.
+- [F0.f]
+  - Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
+  - Same as last week.
+- [F0.g]
+  - A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
+  - Same as last week.
+- [F1.a]
+  - The important state of your game's grid must be backed by a single contiguous byte array in AoS or SoA format. If your game stores the grid state in multiple format, the byte array format must be the primary format (i.e. other formats are decoded from it as needed).
+  - Same as last week.
+- [F1.b]
+  - The player must be able to manually save their progress in the game. This must allow them to load state and continue play another day (i.e. after quitting the game app). The player must be able to manage multiple save files/slots.
+  - Same as last week.
+- [F1.c]
+  - The game must implement an implicit auto-save system to support recovery from unexpected quits. (For example, when the game is launched, if an auto-save entry is present, the game might ask the player "do you want to continue where you left off?" The auto-save entry might or might not be visible among the list of manual save entries available for the player to load as part of F1.b.)
+  - Same as last week.
+- [F1.d]
+  - The player must be able to undo every major choice (all the way back to the start of play), even from a saved game. They should be able to redo (undo of undo operations) multiple times.
+  - Same as last week.
+- [F2.a]
+  - External DSL for scenario designs: In separate text file or text block, designers should be able to express the design of different gameplay scenarios, e.g. starting conditions, weather randomization policy, and victory conditions. The language must be able to schedule unique events that happen at specific times.
+  - Same as last week
+- [F2.b]
+  - Internal DSL for plant types and growth conditions: Within the main programming language used for the rest of your game, you should implement and use a domain-specific language for defining your different types of plants and the unique growth rules that apply to each.
+  - Same as last week.
+- [F2.c]
+  - Switch to an alternate platform: Change either your project's primary programming language or your primary user interface library/engine/framework.
+  - Same as last week.
+
+### Internationalization
+
+The devlog should explain how your code has changed to distinguish between strings internal to the program and strings that will be shown to the player (needing localization). If you did something clever with your language's type system so that the compiler helps you catch incomplete translations or other missing messages, brag about that in this section.
+
+This section should outline which code or data files need to get changed when adding support for a new language or adding a new translatable message to the game.
+
+### Localization
+
+Tell us about which three languages your game supports. For each language, tell us about how you accomplished that localization. Did a team member use their own knowledge of the language? Did you have a friend, volunteer classmate, or paid expert help? Did you make use of a tool like ChatGPT to help? (If so, describe your prompts so that we can see how you gave the system extra context for your project.)
+
+How should the user select which language will be used? Do they change the language setting from inside the game? Did you release three different versions of the game with a different language hard-coded into each? Does the player launch the game with special options (e.g. command line arguments or URL parameters) that encode the choice of language?
+
+### Mobile Installation
+
+How did you get your game to be installable on a smartphone-class mobile device? If you followed a tutorial, guide, video, or blogpost, directly link to those resources that helped you learn. What changes were needed to make the game installable?
+
+### Mobile Play (Offline)
+
+What changes to your design were needed to make it play well on a mobile device? Were there any changes needed to make sure it worked in the offline case?
+
+## Reflection
+
+Looking back on how you achieved the new F3 requirements, how has your team’s plan changed? Did you reconsider any of the choices you previously described for Tools and Materials or your Roles? Has your game design evolved now that you've started to think about giving the player more feedback? It would be very suspicious if you didn’t need to change anything. There’s learning value in you documenting how your team’s thinking has changed over time.
+
 # Devlog Entry - 12/2/2024
 
 ## How we satisfied the software requirements
@@ -31,7 +126,7 @@
   - The growth logic is now more flexible due to the Internal and External DSLs, allowing for customized conditions per plant species.
 - [F0.g]
   - A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
-  - Same as last week.
+  - The victory conditions are now changeable using the External DSL. This allows devs to set specific game scenarios and change the win conditions easily.
 - [F1.a]
   - The important state of your game's grid must be backed by a single contiguous byte array in AoS or SoA format. If your game stores the grid state in multiple format, the byte array format must be the primary format (i.e. other formats are decoded from it as needed).
   - Same as last week.
@@ -217,9 +312,15 @@ In general, we did not have to change much about the previous concepts because o
 
 ## Reflection
 
-CHANGE THIS BEFORE SUBMITTING
+### How the Switch Went
 
-Looking back on how you achieved the new F2 requirements, how has your team’s plan changed? Did you reconsider any of the choices you previously described for Tools and Materials or your Roles? Has your game design evolved now that you've started to think about giving the player more feedback? It would be very suspicious if you didn’t need to change anything. There’s learning value in you documenting how your team’s thinking has changed over time.
+The switch went as smooth as we could have expected because of the preparation made at the beginning of the project. This is outlined in the section above, but in general we used a Phaser template that had equivalents in both Javascript and Typescript which allowed a near seamless swap.
+
+### How the DSLs went
+
+The DSLs required the most refactoring of our project. This caused us to change a lot of the F0 requirements to accommodate for both DSLs. We also got the chance to incorportate new patterns that we haven't worked with previously. We used json files, and added in a new weather system.
+
+All in all, this step of the process was difficult, and due to the Thanksgiving break we were unable to meet the deadline; however, the changes we have made now are well implemented and impactful. We are hoping for the best going into the next and final step.
 
 # Devlog Entry - 11/27/2024
 
