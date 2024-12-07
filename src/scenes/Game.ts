@@ -117,12 +117,6 @@ export class Game extends Phaser.Scene {
     , "⬇️");
 
     // Bind sow/reap
-    document.addEventListener("keydown", (event) => {
-      if (event.code === "Space") {
-        event.preventDefault();
-      }
-    });
-
     inputManager.bindKey("SPACE", () => {
       this.sowOrReap(this.player.position.i, this.player.position.j);
       this.checkForComplete();
