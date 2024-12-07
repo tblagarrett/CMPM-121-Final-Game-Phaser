@@ -10,7 +10,7 @@ export default class Grid extends Phaser.GameObjects.Container {
   public cellSize: number;
   public chanceToGenSun: number;
   public chanceToGenWater: number;
-  public events: WeatherEventConfig[]; 
+  public events: WeatherEventConfig[];
   private cells: Cell[][];
   private time: number;
 
@@ -55,12 +55,12 @@ export default class Grid extends Phaser.GameObjects.Container {
   timeStep(): void {
     this.time++;
     this.events.forEach((event) => {
-      if(event.scheduleTime == this.time) {
+      if (event.scheduleTime == this.time) {
         settings.defineWeatherEvent(this, event);
-      } else if((event.scheduleTime + event.duration) == this.time) {
+      } else if (event.scheduleTime + event.duration == this.time) {
         settings.defineWeather(this);
       }
-    })
+    });
     for (let i = 0; i < this.width; i++) {
       for (let j = 0; j < this.height; j++) {
         let random = Math.random();

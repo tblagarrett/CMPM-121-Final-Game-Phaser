@@ -1,5 +1,6 @@
 import { Scene } from "phaser";
 import { width, height } from "../main";
+import i18next from "../Internationalization";
 
 interface EndSceneData {
   time_steps: number;
@@ -24,21 +25,28 @@ export class End extends Scene {
 
     // You Won! text
     this.add
-      .text(width / 2, height / 2 - height / 12, "You Won!", {
+      .text(width / 2, height / 2 - height / 12, i18next.t("end.you-won"), {
         fontSize: "64px",
       })
       .setOrigin(0.5, 0.5);
 
     // Total time text
     this.add
-      .text(width / 2, height / 2, `Total time: ${time_steps} steps`, {
-        fontSize: "32px",
-      })
+      .text(
+        width / 2,
+        height / 2,
+        `${i18next.t("end.total-time")} ${time_steps} ${i18next.t(
+          "end.steps"
+        )}`,
+        {
+          fontSize: "32px",
+        }
+      )
       .setOrigin(0.5, 0.5);
 
     // Replay button
     this.add
-      .text(width / 2, height / 2 + height / 12, "Play Again", {
+      .text(width / 2, height / 2 + height / 12, i18next.t("end.play-again"), {
         fontSize: "32px",
       })
       .setOrigin(0.5, 0.5)
