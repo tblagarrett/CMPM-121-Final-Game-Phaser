@@ -3,16 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="./favicon.png" />
-    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0"
+    />
     <link rel="stylesheet" href="./style.css" />
-    <title data-i18n="title">Phaser - Template</title>
+    <title data-i18n="title">Emoji Garden</title>
   </head>
-  <body class = "main">
+  <body class="main">
     <div id="app">
-      <div id = "content-wrapper">
-        <div id = "keyInfo">
+      <div id="content-wrapper">
+        <div id="keyInfo">
           <h3 data-i18n="instructions.save">{instructions.save}</h3>
-          <div data-i18n="instructions.save-files">{instructions.save-files}</div>
+          <div data-i18n="instructions.save-files">
+            {instructions.save-files}
+          </div>
           <br />
           <div data-i18n="instructions.save-slot">{instructions.save-slot}</div>
           <br />
@@ -26,16 +31,15 @@
           <br />
           <div data-i18n="instructions.plants">{instructions.plants}</div>
         </div>
-        <div id = "buttons">
-          <div id = "saveFiles"></div>
-          <div id = "saveInfo"></div>
-          <div id = "cntrl"></div>
-          <div id = "gameplay"></div>
+        <div id="buttons">
+          <div id="saveFiles"></div>
+          <div id="saveInfo"></div>
+          <div id="cntrl"></div>
+          <div id="gameplay"></div>
         </div>
       </div>
-      
+
       <div id="game-container"></div>
-      
     </div>
   </body>
 </html>
