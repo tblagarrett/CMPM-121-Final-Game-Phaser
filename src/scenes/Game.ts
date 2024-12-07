@@ -118,7 +118,9 @@ export class Game extends Phaser.Scene {
 
     // Bind sow/reap
     inputManager.bindKey("SPACE", () => {
+      console.log("spacebar triggered");
       this.sowOrReap(this.player.position.i, this.player.position.j);
+      console.log("sowed or reaped");
       this.checkForComplete();
     }, "Sow or Reap");
   }
