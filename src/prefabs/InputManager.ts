@@ -11,8 +11,9 @@ export class InputManager {
 
   // Register a key and its associated callback
   bindKey(key: string, action: InputAction, buttonName: string): void {
-    this.scene.input.keyboard?.on(`keydown-${key}`, () => action);
+    this.scene.input.keyboard?.on(`keydown-${key}`, action);
     this.bindings[key] = action;
+    console.log("keydown" + key);
 
     //making an associated button
     const btn = document.createElement("button");
@@ -41,13 +42,5 @@ export class InputManager {
     } else {
       save?.appendChild(btn);
     }
-  }
-
-  // Clear all bindings
-  clearBindings(): void {
-    Object.keys(this.bindings).forEach((key) => {
-      this.scene.input.keyboard?.off(`keydown-${key}`);
-    });
-    this.bindings = {};
   }
 }
