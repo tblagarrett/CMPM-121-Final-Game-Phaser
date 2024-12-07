@@ -16,6 +16,9 @@ export class InputManager {
     console.log("keydown" + key);
 
     //making an associated button
+    if (document.querySelector(`button[data-i18n='buttons.${buttonName}']`)) {
+      return;
+    }
     const btn = document.createElement("button");
     btn.setAttribute("data-i18n", `buttons.${buttonName}`);
     btn.innerHTML = i18n.t(`buttons.${buttonName}`);
