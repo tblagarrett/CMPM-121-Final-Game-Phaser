@@ -37,23 +37,6 @@ export class Player extends Phaser.GameObjects.Sprite {
     // Initialize cell and actions
     this.position = this.localToCell(x, y);
 
-    // Input manager bindings
-    const inputManager = new InputManager(this.scene);
-
-    // Add event listeners for key inputs
-    inputManager.bindKey("LEFT", () =>
-      this.move(-this.CELLSIZE, 0)
-    , "⬅️");
-    inputManager.bindKey("RIGHT", () =>
-      this.move(this.CELLSIZE, 0)
-    , "➡️");
-    inputManager.bindKey("UP", () =>
-      this.move(0, -this.CELLSIZE)
-    , "⬆️");
-    inputManager.bindKey("DOWN", () =>
-      this.move(0, this.CELLSIZE)
-    , "⬇️");
-
     /*this.scene.input?.keyboard?.on("keydown-LEFT", () =>
       this.move(-this.CELLSIZE, 0)
     );

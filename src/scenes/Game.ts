@@ -102,6 +102,20 @@ export class Game extends Phaser.Scene {
 
     buttonDiv?.appendChild(document.createElement("br"));
 
+    // Add event listeners for key inputs
+    inputManager.bindKey("LEFT", () =>
+      this.player.move(-this.cellSize, 0)
+    , "⬅️");
+    inputManager.bindKey("RIGHT", () =>
+      this.player.move(this.cellSize, 0)
+    , "➡️");
+    inputManager.bindKey("UP", () =>
+      this.player.move(0, -this.cellSize)
+    , "⬆️");
+    inputManager.bindKey("DOWN", () =>
+      this.player.move(0, this.cellSize)
+    , "⬇️");
+
     // Bind sow/reap
     inputManager.bindKey("SPACE", () => {
       this.sowOrReap(this.player.position.i, this.player.position.j);

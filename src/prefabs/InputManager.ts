@@ -24,7 +24,7 @@ export class InputManager {
     const play = document.getElementById("gameplay");
     //buttonDiv?.appendChild(btn);
 
-    if(key == "keydown-LEFT" || key == "keydown-RIGHT" || key == "keydown-UP" || key == "keydown-DOWN" || key == "SPACE"){
+    if(key == "LEFT" || key == "RIGHT" || key == "UP" || key == "DOWN" || key == "SPACE"){
       play?.appendChild(btn);
     }else if(key == "U" || key == "R"){
       cntrl?.appendChild(btn);
