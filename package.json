@@ -39,7 +39,6 @@
     "dependencies": {
         "@types/i18next": "^12.1.0",
         "i18next": "^24.0.5",
-        "i18next-http-backend": "^3.0.1",
         "phaser": "^3.87.0"
     }
 }
