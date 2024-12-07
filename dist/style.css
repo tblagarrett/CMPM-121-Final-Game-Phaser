@@ -37,7 +37,7 @@ body {
 #keyInfo, #buttons {
   flex: 1; /* Ensure both elements take equal width */
   max-width: 45%; /* Limit each to half the width of the parent */
-  height: 40vh; /* Set a fixed height or adjust as needed */
+  height: 45vh; /* Set a fixed height or adjust as needed */
   padding: 1px;
   box-sizing: border-box;
   overflow: auto;  /* Allow scrolling if content overflows */
