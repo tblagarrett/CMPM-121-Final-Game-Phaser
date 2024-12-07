@@ -25,6 +25,7 @@
   - Phaser (JavaScript Compatible Template)
   - Phaser (TypeScript Compatible Template)
   - Webpack to allow dev updates without changing the build
+  - ChatGPT
 
 # Devlog Entry 12/6/2024
 
@@ -34,7 +35,7 @@
 
 - [F0.a]
   - You control a character moving over a 2D grid.
-  - Same as last week.
+  - Controls have been added to use on-screen buttons as well as keyboard keys
 - [F0.b]
   - You advance time manually in the turn-based simulation.
   - Same as last week.
@@ -144,7 +145,9 @@ The game was already fully playable offline when we downloaded it on mobile, so 
 
 ## Reflection
 
-Looking back on how you achieved the new F3 requirements, how has your team’s plan changed? Did you reconsider any of the choices you previously described for Tools and Materials or your Roles? Has your game design evolved now that you've started to think about giving the player more feedback? It would be very suspicious if you didn’t need to change anything. There’s learning value in you documenting how your team’s thinking has changed over time.
+Going into the F3 version of this assignment, we were quite intimidated by the scope of the requirements presented to us. Specifically, the mobile version looked to be a large task. One of our team members took up that task, and was able to get it playing on their android fairly quickly.
+
+In general, F3 was not as difficult to accomplish as F2, which allowed us to get it done a little quicker and not have to change as much about the base code. The things we did change were in relation to the Player's movement, moving it into the Game code. We also changed the text and added buttons, to work with the Internationalization as well as the Mobile application respectively.
 
 # Devlog Entry - 12/2/2024
 
