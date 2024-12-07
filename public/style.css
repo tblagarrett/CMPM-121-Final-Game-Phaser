@@ -9,15 +9,20 @@ body {
   align-items: center;
 }
 
+.main {
+  padding-top: max(env(safe-area-inset-top));
+}
+
 #app {
   width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding: 5px;
   box-sizing: border-box;
+  overflow: hidden;  /* Prevent content overflow */
 }
 
 #content-wrapper {
@@ -26,19 +31,21 @@ body {
   max-width: 800px;
   justify-content: center;
   gap: 5px; /* Space between #keyInfo and #buttons */
-  margin-bottom: 0; /* Space between the row and #game-container */
+  margin-bottom: 3px; /* Space between the row and #game-container */
 }
 
 #keyInfo, #buttons {
   flex: 1; /* Ensure both elements take equal width */
-  max-width: 40%; /* Limit each to half the width of the parent */
-  height: 35vh; /* Set a fixed height or adjust as needed */
-  padding: 5px;
+  max-width: 45%; /* Limit each to half the width of the parent */
+  height: 40vh; /* Set a fixed height or adjust as needed */
+  padding: 1px;
   box-sizing: border-box;
+  overflow: auto;  /* Allow scrolling if content overflows */
 }
 
 #keyInfo {
   line-height: 0.8;
+  font-size: 14px;
 }
 
 #buttons {
@@ -46,8 +53,8 @@ body {
 }
 
 #buttons button {
-  padding: 1rem 1rem;
-  font-size: 11px;  /* Increased font size for better readability */
+  padding: 0.8rem 0.5rem;
+  font-size: 14px;  /* Increased font size for better readability */
   height: auto;  /* Let the height adjust automatically */
   width: auto;  /* Let the width adjust automatically based on content */
   margin: 8px 5px;
@@ -60,10 +67,26 @@ body {
   box-sizing: border-box;  /* Ensure padding and border are included in width/height calculations */
 }
 
+#saveFiles {
+  padding: 0.2rem 0.5rem;
+  font-size: 8px;  /* Increased font size for better readability */
+  display: flex;  /* Use flexbox to arrange buttons side by side */
+  justify-content: center;  /* Center buttons horizontally */
+}
+
+#saveInfo {
+  padding: 0.2rem 0.5rem;
+  font-size: 8px;  /* Increased font size for better readability */
+  display: flex;  /* Use flexbox to arrange buttons side by side */
+  justify-content: center;  /* Center buttons horizontally */
+}
+
 #game-container {
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
+  flex-grow: 1;  /* Allow the game container to take up remaining space */
+  height: auto;  /* Adjust game container height dynamically */
 }
 
 #translation-buttons {

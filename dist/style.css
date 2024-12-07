@@ -3,23 +3,92 @@ body {
   padding: 0;
   color: rgba(255, 255, 255, 0.87);
   background-color: #000000;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main {
+  padding-top: max(env(safe-area-inset-top));
 }
 
 #app {
   width: 100%;
   min-height: 100vh;
-  overflow: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  padding: 5px;
+  box-sizing: border-box;
+  overflow: hidden;  /* Prevent content overflow */
+}
+
+#content-wrapper {
+  display: flex;
+  width: 100%;
+  max-width: 800px;
+  justify-content: center;
+  gap: 5px; /* Space between #keyInfo and #buttons */
+  margin-bottom: 3px; /* Space between the row and #game-container */
+}
+
+#keyInfo, #buttons {
+  flex: 1; /* Ensure both elements take equal width */
+  max-width: 45%; /* Limit each to half the width of the parent */
+  height: 40vh; /* Set a fixed height or adjust as needed */
+  padding: 1px;
+  box-sizing: border-box;
+  overflow: auto;  /* Allow scrolling if content overflows */
+}
+
+#keyInfo {
+  line-height: 0.8;
+  font-size: 14px;
+}
+
+#buttons {
+  text-align: center;       /* Center the buttons horizontally */
+}
+
+#buttons button {
+  padding: 0.8rem 0.5rem;
+  font-size: 14px;  /* Increased font size for better readability */
+  height: auto;  /* Let the height adjust automatically */
+  width: auto;  /* Let the width adjust automatically based on content */
+  margin: 8px 5px;
+  display: inline-block;  /* Ensure the button is an inline block for proper text alignment */
+  text-align: center;  /* Center the text horizontally */
+  line-height: normal;  /* Ensure no line-height issues */
+  border: 1px solid #ccc;  /* Optional: add border to button */
+  background-color: #ffffff;  /* Optional: set background color */
+  color: #000000;  /* Optional: set text color */
+  box-sizing: border-box;  /* Ensure padding and border are included in width/height calculations */
+}
+
+#saveFiles {
+  padding: 0.2rem 0.5rem;
+  font-size: 8px;  /* Increased font size for better readability */
+  display: flex;  /* Use flexbox to arrange buttons side by side */
+  justify-content: center;  /* Center buttons horizontally */
+}
+
+#saveInfo {
+  padding: 0.2rem 0.5rem;
+  font-size: 8px;  /* Increased font size for better readability */
+  display: flex;  /* Use flexbox to arrange buttons side by side */
+  justify-content: center;  /* Center buttons horizontally */
 }
 
 #game-container {
   width: 100%;
   max-width: 800px;
-  margin: 20px auto;
+  margin: 0 auto;
+  flex-grow: 1;  /* Allow the game container to take up remaining space */
+  height: auto;  /* Adjust game container height dynamically */
 }
+
 #translation-buttons {
   display: flex;
   width: 100%;
@@ -39,3 +108,4 @@ body {
   line-height: 1.5;
   border: 1px solid #ccc;
 }
+

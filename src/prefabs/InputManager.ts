@@ -18,6 +18,7 @@ export class InputManager {
     btn.innerHTML = buttonName;
     btn.onclick = action;
     //const buttonDiv = document.getElementById("buttons");
+    const files = document.getElementById("saveFiles");
     const save = document.getElementById("saveInfo");
     const cntrl = document.getElementById("cntrl");
     const play = document.getElementById("gameplay");
@@ -27,6 +28,8 @@ export class InputManager {
       play?.appendChild(btn);
     }else if(key == "U" || key == "R"){
       cntrl?.appendChild(btn);
+    }else if (key == "ONE" || key == "TWO" || key == "THREE"){
+      files?.appendChild(btn);
     }else{
       save?.appendChild(btn);
     }
