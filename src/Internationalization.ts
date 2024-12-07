@@ -8,7 +8,7 @@ i18next
     resources: {
       en: {
         translation: {
-          title: "Phaser - Template",
+          title: "Emoji Garden",
           instructions: {
             save: "Save Instructions",
             "save-files": "Press [1], [2], or [3] to navigate save files.",
@@ -46,7 +46,7 @@ i18next
       },
       zh: {
         translation: {
-          title: "Phaser - 模板",
+          title: "表情符号花园",
           instructions: {
             save: "保存说明",
             "save-files": "按 [1]、[2] 或 [3] 导航存档文件。",
@@ -84,7 +84,7 @@ i18next
       },
       ar: {
         translation: {
-          title: "فايزر - قالب",
+          title: "حديقة الرموز التعبيرية",
           instructions: {
             save: "تعليمات الحفظ",
             "save-files": "اضغط على [1] أو [2] أو [3] للتنقل بين ملفات الحفظ.",
