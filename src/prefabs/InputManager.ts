@@ -1,3 +1,4 @@
+import i18n from "../Internationalization";
 type InputAction = () => void;
 
 export class InputManager {
@@ -10,12 +11,13 @@ export class InputManager {
 
   // Register a key and its associated callback
   bindKey(key: string, action: InputAction, buttonName: string): void {
-    this.scene.input.keyboard?.on(`keydown-${key}`, action);
+    this.scene.input.keyboard?.on(`keydown-${key}`, () => action);
     this.bindings[key] = action;
 
     //making an associated button
-    const btn = document.createElement('button');
-    btn.innerHTML = buttonName;
+    const btn = document.createElement("button");
+    btn.setAttribute("data-i18n", `buttons.${buttonName}`);
+    btn.innerHTML = i18n.t(`buttons.${buttonName}`);
     btn.onclick = action;
     //const buttonDiv = document.getElementById("buttons");
     const files = document.getElementById("saveFiles");
@@ -24,13 +26,19 @@ export class InputManager {
     const play = document.getElementById("gameplay");
     //buttonDiv?.appendChild(btn);
 
-    if(key == "LEFT" || key == "RIGHT" || key == "UP" || key == "DOWN" || key == "SPACE"){
+    if (
+      key == "LEFT" ||
+      key == "RIGHT" ||
+      key == "UP" ||
+      key == "DOWN" ||
+      key == "SPACE"
+    ) {
       play?.appendChild(btn);
-    }else if(key == "U" || key == "R"){
+    } else if (key == "U" || key == "R") {
       cntrl?.appendChild(btn);
-    }else if (key == "ONE" || key == "TWO" || key == "THREE"){
+    } else if (key == "ONE" || key == "TWO" || key == "THREE") {
       files?.appendChild(btn);
-    }else{
+    } else {
       save?.appendChild(btn);
     }
   }
