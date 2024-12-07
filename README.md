@@ -16,7 +16,6 @@
   - The maximum number of growth stages differ between plants and each plant has different sun and water requirements to progress to each stage.
   - All plants require at least 2 neighboring plants to be able to progress to the next possible stage.
 - Upon reaching the maximum possible growth stage, the player can reap/harvest the plant when standing in the corresponding cell.
-- The game reaches completion when the player can successfully reap 10 plants.
 
 ## Programming Practices:
 
@@ -78,23 +77,70 @@
 
 ### Internationalization
 
-The devlog should explain how your code has changed to distinguish between strings internal to the program and strings that will be shown to the player (needing localization). If you did something clever with your language's type system so that the compiler helps you catch incomplete translations or other missing messages, brag about that in this section.
+We implemented internationalization using the **i18next** library, which allowed us to dynamically switch between languages at runtime.
 
-This section should outline which code or data files need to get changed when adding support for a new language or adding a new translatable message to the game.
+Here is how our code was adapted:
+
+1. **Separation of Strings:**
+
+   All strings shown to the player, such as instructions, UI elements, and end-screen messages, are now defined in an external `resources` object within `internationalization.ts`. These are grouped by language codes and organized into categories like `instructions` and `end`. This made it easy to access from anywhere else in the project.
+
+2. **Text Swapping**
+
+   HTML elements with a `data-i18n` attribute are automatically updated using the `updateTranslations()` function, which fetches the correct translations for the active language and puts them onto the screen
+
+3. **Language Switching:**
+
+   A language switcher was added to the game’s interface. Users can switch between English, Chinese, and Arabic using buttons on the screen. Clicking a button triggers `i18next.changeLanguage()` to update the language and refresh the displayed translations.
+
+**To Add a New Language**
+
+In `Internationalization.ts`, add a new entry in the `resources` object with the appropriate language code and corresponding translations.
+
+**To Add New Translatable Text**
+
+Add a key-value pair under the relevant category in `resources` for each supported language.
+
+The HTML element that it comes from will need to look something like: `<div data-i18n="instructions.plants">{instructions.plants}</div>`
 
 ### Localization
 
-Tell us about which three languages your game supports. For each language, tell us about how you accomplished that localization. Did a team member use their own knowledge of the language? Did you have a friend, volunteer classmate, or paid expert help? Did you make use of a tool like ChatGPT to help? (If so, describe your prompts so that we can see how you gave the system extra context for your project.)
+Our game supports the following languages:
 
-How should the user select which language will be used? Do they change the language setting from inside the game? Did you release three different versions of the game with a different language hard-coded into each? Does the player launch the game with special options (e.g. command line arguments or URL parameters) that encode the choice of language?
+- English (en): Provided by team members.
+- Chinese (zh): Translated with help from a fluent speaker on the team.
+- Arabic (ar): Translated using ChatGPT
+
+For the Arabic translation, we simply provided the existing object holding the text and asked ChatGPT to "translate into arabic"
+
+**Language Selection:**
+
+The player can switch languages using buttons displayed on the main screen. These buttons were added dynamically via JavaScript and are placed at the top of the page. The active language updates immediately upon selection.
 
 ### Mobile Installation
 
-How did you get your game to be installable on a smartphone-class mobile device? If you followed a tutorial, guide, video, or blogpost, directly link to those resources that helped you learn. What changes were needed to make the game installable?
+To make our game installable on a smartphone, we followed these steps:
+
+1. Installed Android Studio, an IDE for Android app development.
+2. Installed Capacitor via npm. Capacitor bridges web-based code (e.g., Phaser) to create Android and iOS-compatible applications.
+3. Implemented mobile-friendly buttons and reorganized the CSS to ensure a mobile-compatible layout.
+4. Used Capacitor to convert our Phaser game code into an Android-compatible application.
+5. Opened the project in Android Studio and used the Google Pixel emulator to test the app.
+6. Built the APK file by navigating to Build > Build APKs/Bundles > Build APK in Android Studio.
+7. Transferred the app-debug.apk (debug version of the app) to an Android phone. This APK file served as an installer, allowing the game to be installed and played directly from the home screen.
+
+Tutorial used was [this one](https://phaser.io/tutorials/bring-your-phaser-game-to-ios-and-android-with-capacitor) from Phaser.
 
 ### Mobile Play (Offline)
 
-What changes to your design were needed to make it play well on a mobile device? Were there any changes needed to make sure it worked in the offline case?
+**Key Changes**
+
+- Implementing touch-friendly buttons for navigation and interactions.
+- Adjusting the CSS to optimize the layout for smaller screens.
+
+**Offline**
+
+The game was already fully playable offline when we downloaded it on mobile, so no additional changes were required to enable this functionality.
 
 ## Reflection
 
