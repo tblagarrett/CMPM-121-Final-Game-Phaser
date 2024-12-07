@@ -9,21 +9,32 @@
   </head>
   <body>
     <div id="app">
-      <h3 data-i18n="instructions.save">{instructions.save}</h3>
-      <div data-i18n="instructions.save-files">{instructions.save-files}</div>
-      <br />
-      <div data-i18n="instructions.save-slot">{instructions.save-slot}</div>
-      <br />
-      <div data-i18n="instructions.load-slot">{instructions.load-slot}</div>
-      <br />
-      <div data-i18n="instructions.undo-redo">{instructions.undo-redo}</div>
-      <h3 data-i18n="instructions.game">{instructions.game}</h3>
-      <div data-i18n="instructions.movement">{instructions.movement}</div>
-      <br />
-      <div data-i18n="instructions.reap">{instructions.reap}</div>
-      <br />
-      <div data-i18n="instructions.plants">{instructions.plants}</div>
+      <div id = "content-wrapper">
+        <div id = "keyInfo">
+          <h3 data-i18n="instructions.save">{instructions.save}</h3>
+          <div data-i18n="instructions.save-files">{instructions.save-files}</div>
+          <br />
+          <div data-i18n="instructions.save-slot">{instructions.save-slot}</div>
+          <br />
+          <div data-i18n="instructions.load-slot">{instructions.load-slot}</div>
+          <br />
+          <div data-i18n="instructions.undo-redo">{instructions.undo-redo}</div>
+          <h3 data-i18n="instructions.game">{instructions.game}</h3>
+          <div data-i18n="instructions.movement">{instructions.movement}</div>
+          <br />
+          <div data-i18n="instructions.reap">{instructions.reap}</div>
+          <br />
+          <div data-i18n="instructions.plants">{instructions.plants}</div>
+        </div>
+        <div id = "buttons">
+          <div id = "saveInfo"></div>
+          <div id = "cntrl"></div>
+          <div id = "gameplay"></div>
+        </div>
+      </div>
+      
       <div id="game-container"></div>
+      
     </div>
   </body>
 </html>

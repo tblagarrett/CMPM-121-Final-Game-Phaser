@@ -1,4 +1,5 @@
 import { Game } from "../scenes/Game"; // Import the Game class
+import { InputManager } from "./InputManager";
 
 // based on grid cells
 export interface Position {
@@ -36,8 +37,24 @@ export class Player extends Phaser.GameObjects.Sprite {
     // Initialize cell and actions
     this.position = this.localToCell(x, y);
 
+    // Input manager bindings
+    const inputManager = new InputManager(this.scene);
+
     // Add event listeners for key inputs
-    this.scene.input?.keyboard?.on("keydown-LEFT", () =>
+    inputManager.bindKey("keydown-LEFT", () =>
+      this.move(-this.CELLSIZE, 0)
+    , "⬅️");
+    inputManager.bindKey("keydown-RIGHT", () =>
+      this.move(this.CELLSIZE, 0)
+    , "➡️");
+    inputManager.bindKey("keydown-UP", () =>
+      this.move(0, -this.CELLSIZE)
+    , "⬆️");
+    inputManager.bindKey("keydown-DOWN", () =>
+      this.move(0, this.CELLSIZE)
+    , "⬇️");
+
+    /*this.scene.input?.keyboard?.on("keydown-LEFT", () =>
       this.move(-this.CELLSIZE, 0)
     );
     this.scene.input?.keyboard?.on("keydown-RIGHT", () =>
@@ -48,7 +65,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     );
     this.scene.input?.keyboard?.on("keydown-DOWN", () =>
       this.move(0, this.CELLSIZE)
-    );
+    );*/
   }
 
   localToCell(x: number, y: number): { i: number; j: number } {

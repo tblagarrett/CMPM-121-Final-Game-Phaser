@@ -9,9 +9,27 @@ export class InputManager {
   }
 
   // Register a key and its associated callback
-  bindKey(key: string, action: InputAction): void {
+  bindKey(key: string, action: InputAction, buttonName: string): void {
     this.scene.input.keyboard?.on(`keydown-${key}`, action);
     this.bindings[key] = action;
+
+    //making an associated button
+    const btn = document.createElement('button');
+    btn.innerHTML = buttonName;
+    btn.onclick = action;
+    //const buttonDiv = document.getElementById("buttons");
+    const save = document.getElementById("saveInfo");
+    const cntrl = document.getElementById("cntrl");
+    const play = document.getElementById("gameplay");
+    //buttonDiv?.appendChild(btn);
+
+    if(key == "keydown-LEFT" || key == "keydown-RIGHT" || key == "keydown-UP" || key == "keydown-DOWN" || key == "SPACE"){
+      play?.appendChild(btn);
+    }else if(key == "U" || key == "R"){
+      cntrl?.appendChild(btn);
+    }else{
+      save?.appendChild(btn);
+    }
   }
 
   // Clear all bindings

@@ -64,41 +64,49 @@ export class Game extends Phaser.Scene {
     // Input manager bindings
     const inputManager = new InputManager(this);
 
-    // Bind sow/reap
-    inputManager.bindKey("SPACE", () => {
-      this.sowOrReap(this.player.position.i, this.player.position.j);
-      this.checkForComplete();
+    const buttonDiv = document.getElementById("buttons");
+
+    // Bind save slot selection
+    ["ONE", "TWO", "THREE"].forEach((key, index) => {
+      inputManager.bindKey(key, () => {
+        this.selectSaveSlot(index + 1);
+      }, "Save " + key);
     });
+    
+    buttonDiv?.appendChild(document.createElement("br"));
 
     // Bind save/load/undo/redo
-    inputManager.bindKey("S", () => this.saveGameState());
-    inputManager.bindKey("L", () => this.loadGameState());
+    inputManager.bindKey("S", () => this.saveGameState(), "Save");
+    inputManager.bindKey("L", () => this.loadGameState(), "Load");
+    // Reset game
+    inputManager.bindKey("C", () => {
+      localStorage.clear();
+      location.reload();
+    }, "Reset");
+
+    buttonDiv?.appendChild(document.createElement("br"));
+
     inputManager.bindKey("U", () => {
       const session = this.StateManager.undo(this.grid);
       if (session) {
         this.updateGameState(session);
       }
-    });
+    }, "Undo");
 
     inputManager.bindKey("R", () => {
       const session = this.StateManager.redo(this.grid);
       if (session) {
         this.updateGameState(session);
       }
-    });
+    }, "Redo");
 
-    // Bind save slot selection
-    ["ONE", "TWO", "THREE"].forEach((key, index) => {
-      inputManager.bindKey(key, () => {
-        this.selectSaveSlot(index + 1);
-      });
-    });
+    buttonDiv?.appendChild(document.createElement("br"));
 
-    // Reset game
-    inputManager.bindKey("C", () => {
-      localStorage.clear();
-      location.reload();
-    });
+    // Bind sow/reap
+    inputManager.bindKey("SPACE", () => {
+      this.sowOrReap(this.player.position.i, this.player.position.j);
+      this.checkForComplete();
+    }, "Sow or Reap");
   }
 
   selectSaveSlot(slotNumber: number): void {
