@@ -1,5 +1,4 @@
 import { Game } from "../scenes/Game"; // Import the Game class
-import { InputManager } from "./InputManager";
 
 // based on grid cells
 export interface Position {

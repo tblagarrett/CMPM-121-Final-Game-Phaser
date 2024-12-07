@@ -22,7 +22,6 @@ body {
   align-items: center;
   padding: 5px;
   box-sizing: border-box;
-  overflow: hidden;  /* Prevent content overflow */
 }
 
 #content-wrapper {
