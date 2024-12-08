@@ -12,7 +12,7 @@ export default class Grid extends Phaser.GameObjects.Container {
   public chanceToGenWater: number;
   public events: WeatherEventConfig[];
   private cells: Cell[][];
-  private time: number;
+  public time: number;
 
   constructor(
     scene: Phaser.Scene,
@@ -28,7 +28,7 @@ export default class Grid extends Phaser.GameObjects.Container {
     this.height = height;
     this.cellSize = cellSize;
     settings.defineWeather(this);
-
+    this.time = 0;
     this.cells = [];
 
     // Create the grid of cells

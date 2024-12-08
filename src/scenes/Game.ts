@@ -219,6 +219,7 @@ export class Game extends Phaser.Scene {
     this.player.reset(session.position);
     // Update time state
     this.time_steps = session.time;
+    this.grid.time = session.time;
     console.log("time:", this.time_steps);
     this.updateGridVisuals();
   }
