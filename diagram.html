@@ -32,15 +32,16 @@
     </style>
   </head>
   <body>
-    <!-- Cell Data Section -->
     <h1>Memory Layout Diagram</h1>
+
+    <!-- Cell Data Section -->
     <table>
       <caption>
         Cell Data:
       </caption>
       <thead>
         <tr>
-          <th>Cell WaterStored (4 bytes)</th>
+          <th>WaterStored (4 bytes)</th>
           <th>Plant Level (4 bytes)</th>
           <th>Plant Type (4 bytes)</th>
           <th>Plant WaterStored (4 bytes)</th>
@@ -65,8 +66,20 @@
       </caption>
       <tbody>
         <tr>
-          <td>Player Pos X (4 bytes)</td>
-          <td>Player Pos Y (4 bytes)</td>
+          <td>Position i (4 bytes)</td>
+          <td>Position j (4 bytes)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Time Section -->
+    <table>
+      <caption>
+        Time:
+      </caption>
+      <tbody>
+        <tr>
+          <td>Time Step (4 bytes)</td>
         </tr>
       </tbody>
     </table>
@@ -75,66 +88,21 @@
     <p>
       For a gridWidth x gridHeight grid:<br />
       Each cell occupies 20 bytes (5 fields x 4 bytes per field).<br />
-      The entire grid occupies gridWidth * gridHeight * 20 bytes.
+      The entire grid occupies gridWidth * gridHeight * 20 bytes.<br />
+      Player position occupies 8 bytes (2 fields x 4 bytes per field).<br />
+      Time occupies 4 bytes.
     </p>
-
-    <!-- Multiple Cells -->
-    <table>
-      <caption>
-        Cell 1:
-      </caption>
-      <tbody>
-        <tr>
-          <td>4 bytes</td>
-          <td>4 bytes</td>
-          <td>4 bytes</td>
-          <td>4 bytes</td>
-          <td>4 bytes</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <table>
-      <caption>
-        Cell 2:
-      </caption>
-      <tbody>
-        <tr>
-          <td>4 bytes</td>
-          <td>4 bytes</td>
-          <td>4 bytes</td>
-          <td>4 bytes</td>
-          <td>4 bytes</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p>...</p>
-
-    <table>
-      <caption>
-        Cell n:
-      </caption>
-      <tbody>
-        <tr>
-          <td>4 bytes</td>
-          <td>4 bytes</td>
-          <td>4 bytes</td>
-          <td>4 bytes</td>
-          <td>4 bytes</td>
-        </tr>
-      </tbody>
-    </table>
 
     <!-- Full Array Layout -->
     <table>
       <caption>
-        FULL ARRAY LAYOUT:
+        Full Memory Layout:
       </caption>
       <tbody>
         <tr>
           <td>Grid Data (gridWidth x gridHeight x 20 bytes)</td>
           <td>Player Position (8 bytes)</td>
+          <td>Time (4 bytes)</td>
         </tr>
       </tbody>
     </table>
